@@ -1,7 +1,6 @@
 import 'package:duuit/const/color_const.dart';
 import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
-import 'package:duuit/controllers/onboarding/onboarding_page_2_controller.dart';
 import 'package:duuit/services/auth/auth.dart';
 import 'package:duuit/utils/app_sizes.dart';
 import 'package:duuit/views/widgets/custom_app_bar_1.dart';
@@ -9,10 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OnboardingPage2 extends StatelessWidget {
-  OnboardingPage2({Key? key}) : super(key: key);
-
-  final OnboardingPage2Controller _onboardingPage2Controller =
-      Get.put(OnboardingPage2Controller());
+  const OnboardingPage2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
