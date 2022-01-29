@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">duuit!</string>
+    <string name="facebook_app_id">653669955827441</string>
+    <string name="fb_login_protocol_scheme">fb653669955827441</string>
+    <string name="facebook_client_token">2cc3f6ca3620b49c9ee84ea93dc9b1af</string>
+</resources>

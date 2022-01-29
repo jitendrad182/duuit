@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "391806114108",
+    "project_id": "duuit-f6039",
+    "storage_bucket": "duuit-f6039.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391806114108:android:5b9924831543ea03726639",
+        "android_client_info": {
+          "package_name": "com.duuit.duuit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "391806114108-vpo2ntcp8qsvq2upuk70mi1h71trolet.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.duuit.duuit",
+            "certificate_hash": "cf8fec9d964902408653bcd47ab2290f3150428c"
+          }
+        },
+        {
+          "client_id": "391806114108-2tvg6ou338963ulnm1clt63knv7mb12d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADYF0HUgNoPlgCKobNwy2J0ETeZTg-kvQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "391806114108-2tvg6ou338963ulnm1clt63knv7mb12d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
