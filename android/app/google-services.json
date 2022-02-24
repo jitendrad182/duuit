@@ -37,6 +37,13 @@
             {
               "client_id": "391806114108-2tvg6ou338963ulnm1clt63knv7mb12d.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "391806114108-ib8hhfd23odo946fo9p35r3hslp1h15h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.duuit.duuit"
+              }
             }
           ]
         }

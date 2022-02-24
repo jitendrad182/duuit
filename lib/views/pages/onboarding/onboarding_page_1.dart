@@ -1,18 +1,23 @@
 import 'package:duuit/const/color_const.dart';
 import 'package:duuit/const/image_const.dart';
+import 'package:duuit/const/string_const.dart';
 import 'package:duuit/utils/app_sizes.dart';
 import 'package:duuit/views/pages/onboarding/onboarding_page_2.dart';
 import 'package:duuit/views/pages/onboarding/sign_in_page.dart';
+import 'package:duuit/views/widgets/custom_app_bars/custom_app_bar_1.dart';
+import 'package:duuit/views/widgets/custom_buttons/custom_button_1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OnboardingPage1 extends StatelessWidget {
   const OnboardingPage1({Key? key}) : super(key: key);
+  static const id = '/';
 
   @override
   Widget build(BuildContext context) {
-    AppSizes.mediaQueryHeightWidth(context);
+    AppSizes.mediaQueryHeightWidth();
     return Scaffold(
+      appBar: appBar1,
       body: SafeArea(
         child: Column(
           children: [
@@ -31,12 +36,12 @@ class OnboardingPage1 extends StatelessWidget {
                   children: [
                     Image.asset(
                       ImageConst.logo,
-                      height: AppSizes.height10 * 11,
+                      height: AppSizes.height10 * 10,
                     ),
                     SizedBox(height: AppSizes.height10 * 2),
                     Image.asset(
                       ImageConst.duuit,
-                      height: AppSizes.height10 * 4,
+                      height: AppSizes.height10 * 3.5,
                     ),
                   ],
                 ),
@@ -46,52 +51,23 @@ class OnboardingPage1 extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    child: Container(
-                      width: double.infinity,
-                      height: AppSizes.height10 * 4.5,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: AppSizes.height10 * 2),
-                      decoration: BoxDecoration(
-                        color: ColorConst.primaryColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Get Started',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: AppSizes.height10 * 1.8,
-                          ),
-                        ),
-                      ),
-                    ),
+                  CustomButton1(
+                    text: StringConst.getStarted,
+                    color: ColorConst.primaryColor,
+                    textColor: ColorConst.whiteColor,
                     onTap: () {
-                      Get.to(OnboardingPage2());
+                      Get.to(() => OnboardingPage2());
                     },
                   ),
                   SizedBox(height: AppSizes.height10 * 2.5),
-                  GestureDetector(
-                    child: Container(
-                      width: double.infinity,
-                      height: AppSizes.height10 * 4.5,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: AppSizes.height10 * 2),
-                      decoration: BoxDecoration(
-                        color: ColorConst.whiteColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Got an account? Sign in here.',
-                          style: TextStyle(fontSize: AppSizes.height10 * 1.5),
-                        ),
-                      ),
-                    ),
+                  CustomButton1(
+                    text: StringConst.gotAnAccount,
+                    color: ColorConst.whiteColor,
+                    textColor: ColorConst.blackColor,
                     onTap: () {
-                      Get.to(SignInPage());
+                      Get.to(() => SignInPage());
                     },
-                  ),
+                  )
                 ],
               ),
             )

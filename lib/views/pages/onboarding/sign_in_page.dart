@@ -1,177 +1,162 @@
 import 'package:duuit/const/color_const.dart';
+import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
-import 'package:duuit/services/auth/auth.dart';
+import 'package:duuit/services/auth.dart';
 import 'package:duuit/utils/app_sizes.dart';
-import 'package:duuit/views/widgets/custom_app_bar_1.dart';
+import 'package:duuit/utils/no_leading_trailing_space_formatter.dart';
+import 'package:duuit/views/pages/onboarding/forgot_password_page.dart';
+import 'package:duuit/views/widgets/custom_app_bars/custom_app_bar_2.dart';
+import 'package:duuit/views/widgets/custom_buttons/custom_button_2.dart';
+import 'package:duuit/views/widgets/custom_buttons/custom_button_3.dart';
+import 'package:duuit/views/widgets/custom_text_form_fields/custom_text_form_field_1.dart';
+import 'package:duuit/views/widgets/custom_titles/custom_title_1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-//TODO:
 class SignInPage extends StatelessWidget {
   SignInPage({Key? key}) : super(key: key);
+  static const id = '/SignInPage';
 
-  final TextEditingController _controllerEmail = TextEditingController();
-  final TextEditingController _controllerPass = TextEditingController();
+  final _key = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+
+  final AuthController _controller = Get.find();
+
+  void signInWithEmail(BuildContext context) async {
+    if (_key.currentState!.validate()) {
+      FocusManager.instance.primaryFocus!.unfocus();
+      await _controller.signInWithEmail(
+        email: _emailController.text.trim(),
+        password: _passController.text.trim(),
+        context: context,
+      );
+    }
+  }
+
+  void signInWithFacebook(BuildContext context) async {
+    FocusManager.instance.primaryFocus!.unfocus();
+    await _controller.signInWithFacebook(isSignInPage: true, context: context);
+  }
+
+  void signInWithGoogle(BuildContext context) async {
+    FocusManager.instance.primaryFocus!.unfocus();
+    await _controller.signInWithGoogle(isSignInPage: true, context: context);
+  }
+
+  void onTap() {
+    FocusManager.instance.primaryFocus!.unfocus();
+    Get.to(() => ForgotPasswordPage());
+  }
+
   @override
   Widget build(BuildContext context) {
-    AppSizes.mediaQueryHeightWidth(context);
     return Scaffold(
+      appBar: appBar2,
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              const CustomAppBar1(),
-              SizedBox(
-                height: AppSizes.height10 * 1.5,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSizes.width10 * 2),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              SizedBox(height: AppSizes.height10 * 1.2),
+              const CustomTitle1(text: StringConst.welcomeBack),
+              SizedBox(height: AppSizes.height10 * 2),
+              Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: _key,
+                child: Column(
                   children: [
-                    GestureDetector(
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: ColorConst.primaryColor,
-                        size: AppSizes.height10 * 3.5,
-                      ),
-                      onTap: () {
-                        Get.back();
+                    CustomTextFormField1(
+                      controller: _emailController,
+                      maxLines: 1,
+                      hintText: StringConst.email,
+                      validator: (val) {
+                        if (GetUtils.isEmail(val!)) {
+                          return null;
+                        } else {
+                          return StringConst.validEmail;
+                        }
                       },
+                      keyboardType: TextInputType.emailAddress,
+                      inputFormatters: [NoLeadingTrailingSpaceFormatter()],
+                      obscureText: false,
                     ),
-                    SizedBox(
-                      width: AppSizes.height10 * 3,
+                    SizedBox(height: AppSizes.height10 * 2),
+                    CustomTextFormField1(
+                      controller: _passController,
+                      maxLines: 1,
+                      hintText: StringConst.password,
+                      validator: (val) {
+                        if (GetUtils.isLengthGreaterOrEqual(val!, 8)) {
+                          return null;
+                        } else {
+                          return StringConst.enterYourPassword;
+                        }
+                      },
+                      keyboardType: TextInputType.visiblePassword,
+                      inputFormatters: [NoLeadingTrailingSpaceFormatter()],
+                      obscureText: true,
                     ),
-                    Expanded(
-                      child: Text(
-                        'Welcome Back jbkdjkdsbjkdsfbjdfsbjdfsjbdfjb',
-                        style: TextStyle(
-                          fontSize: AppSizes.height10 * 3,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: StringConst.nunitoSansFont,
-                        ),
-                      ),
-                    )
+                    SizedBox(height: AppSizes.height10 * 2)
                   ],
                 ),
               ),
-              SizedBox(
-                height: AppSizes.height10 * 2.5,
+              SizedBox(height: AppSizes.height10 * 2),
+              CustomButton2(
+                text: StringConst.signInWithEmail,
+                onTap: () {
+                  signInWithEmail(context);
+                },
               ),
+              SizedBox(height: AppSizes.height10 * 4),
+              GestureDetector(
+                child: Text(
+                  StringConst.forgotYourPassword,
+                  style: TextStyle(
+                    fontSize: AppSizes.height10 * 1.8,
+                    fontWeight: FontWeight.w600,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                onTap: onTap,
+              ),
+              SizedBox(height: AppSizes.height10 * 2),
+              Text(
+                StringConst.signInWith,
+                style: TextStyle(
+                  fontSize: AppSizes.height10 * 1.6,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: AppSizes.height10 * 2),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSizes.width10 * 3),
-                child: TextFormField(
-                  keyboardType: TextInputType.name,
-                  validator: (val) {},
-                  onChanged: (value) {},
-                  controller: _controllerEmail,
-                  decoration: InputDecoration(
-                    hintText: 'Choose a cool username',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: AppSizes.height10 * 1.5,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSizes.width10 * 3),
-                child: TextFormField(
-                  maxLines: 6,
-                  controller: _controllerPass,
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                    hintText: 'Write about yourself',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: AppSizes.height10 * 2.5,
-              ),
-              GestureDetector(
-                child: Container(
-                  width: AppSizes.height10 * 20,
-                  height: AppSizes.height10 * 4.5,
-                  margin:
-                      EdgeInsets.symmetric(horizontal: AppSizes.height10 * 2),
-                  decoration: BoxDecoration(
-                    color: ColorConst.primaryColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'email',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: AppSizes.height10 * 1.8,
+                padding: EdgeInsets.symmetric(horizontal: AppSizes.width10 * 2),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CustomButton3(
+                        text: StringConst.fb,
+                        image: ImageConst.fb,
+                        color: ColorConst.whiteColor,
+                        onTap: () {
+                          signInWithFacebook(context);
+                        },
                       ),
                     ),
-                  ),
-                ),
-                onTap: () {
-                  Auth().signInWithEmailAndPassword(
-                      _controllerEmail.text, _controllerPass.text);
-                },
-              ),
-              SizedBox(
-                height: AppSizes.height10 * 2.5,
-              ),
-              GestureDetector(
-                child: Container(
-                  width: AppSizes.height10 * 20,
-                  height: AppSizes.height10 * 4.5,
-                  margin:
-                      EdgeInsets.symmetric(horizontal: AppSizes.height10 * 2),
-                  decoration: BoxDecoration(
-                    color: ColorConst.primaryColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Google',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: AppSizes.height10 * 1.8,
+                    SizedBox(width: AppSizes.width10),
+                    Expanded(
+                      child: CustomButton3(
+                        text: StringConst.google,
+                        image: ImageConst.google,
+                        color: ColorConst.whiteColor,
+                        onTap: () {
+                          signInWithGoogle(context);
+                        },
                       ),
                     ),
-                  ),
+                  ],
                 ),
-                onTap: () {
-                  Auth().signInWithGoogle();
-                },
-              ),
-              SizedBox(
-                height: AppSizes.height10 * 2.5,
-              ),
-              GestureDetector(
-                child: Container(
-                  width: AppSizes.height10 * 20,
-                  height: AppSizes.height10 * 4.5,
-                  margin:
-                      EdgeInsets.symmetric(horizontal: AppSizes.height10 * 2),
-                  decoration: BoxDecoration(
-                    color: ColorConst.primaryColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'FB',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: AppSizes.height10 * 1.8,
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  Auth().signInWithFacebook();
-                },
               ),
             ],
           ),
@@ -180,4 +165,3 @@ class SignInPage extends StatelessWidget {
     );
   }
 }
-//TODO:
