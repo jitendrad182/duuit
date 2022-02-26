@@ -2,7 +2,6 @@ import 'package:duuit/const/color_const.dart';
 import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
 import 'package:duuit/controllers/add_goal_controller.dart';
-import 'package:duuit/controllers/create_profile_controller.dart';
 import 'package:duuit/controllers/find_buddies_controller.dart';
 import 'package:duuit/services/auth.dart';
 import 'package:duuit/utils/app_sizes.dart';
@@ -21,11 +20,9 @@ class OnboardingPage6 extends StatelessWidget {
   static const id = '/OnboardingPage6';
 
   final AuthController _authController = Get.find();
-
   final AddBuddiesController _addBuddiesController = Get.find();
   final AddGoalController _addGoalController = Get.find();
-
-  final CreateProfileController _createProfileController = Get.find();
+  final RecapController _recapController = Get.put(RecapController());
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +33,8 @@ class OnboardingPage6 extends StatelessWidget {
           children: [
             SizedBox(height: AppSizes.height10),
             const CustomTitle2(
-              text: 'So, to',
-              coloredText: ' Recap',
+              text: StringConst.soTo,
+              coloredText: StringConst.recap,
             ),
             SizedBox(height: AppSizes.height10),
             Padding(
@@ -45,7 +42,7 @@ class OnboardingPage6 extends StatelessWidget {
               child: Row(
                 children: [
                   Image.asset(
-                    "assets/avatars/avatar${_createProfileController.avatar()}.png",
+                    _recapController.avatar.toString(),
                     height: AppSizes.height10 * 12,
                   ),
                   Expanded(
@@ -58,13 +55,13 @@ class OnboardingPage6 extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _createProfileController.userName(),
+                            _recapController.userName.toString(),
                             style: TextStyle(
                                 fontSize: AppSizes.height10 * 2.2,
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            _createProfileController.userDescription(),
+                            _recapController.userDescription.toString(),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 4,
                             style: TextStyle(

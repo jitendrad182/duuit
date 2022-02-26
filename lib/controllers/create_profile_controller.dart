@@ -1,3 +1,4 @@
+import 'package:duuit/const/image_const.dart';
 import 'package:duuit/models/create_profile_model.dart';
 import 'package:get/get.dart';
 
@@ -13,7 +14,7 @@ class CreateProfileController extends GetxController {
   }
 
   String avatarImageConst() {
-    return 'assets/avatars/avatar${_createProfile.value.avatar}.png';
+    return ImageConst.avatar(_createProfile.value.avatar);
   }
 
   String userName() {

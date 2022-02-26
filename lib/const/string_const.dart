@@ -76,5 +76,7 @@ class StringConst {
   static const String passwordResetEmail =
       'Password reset email has been sent to you';
   static const String atLeastAddOneBuddie = 'At least add one Buddie.';
+  static const String soTo = 'So, to';
+  static const String recap = ' Recap';
 }
 //TODO:

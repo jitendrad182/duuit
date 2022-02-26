@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Dialogs {
-  static circularProgressIndicator(BuildContext context) {
+  static circularProgressIndicatorDialog(BuildContext context) {
     return showDialog(
       barrierDismissible: false,
       context: context,

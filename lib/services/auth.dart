@@ -52,7 +52,7 @@ class AuthController extends GetxController {
   }
 
   uid() async {
-    return _auth.currentUser!.uid;
+    return _auth.currentUser?.uid;
   }
 
   creationTime() async {
@@ -74,9 +74,10 @@ class AuthController extends GetxController {
     Get.offAll(() => const OnboardingPage1());
   }
 
+  //TODO:
   createUser(
       {String? email, String? password, required BuildContext context}) async {
-    Dialogs.circularProgressIndicator(context);
+    Dialogs.circularProgressIndicatorDialog(context);
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -116,7 +117,7 @@ class AuthController extends GetxController {
 
   signInWithEmail(
       {String? email, String? password, required BuildContext context}) async {
-    Dialogs.circularProgressIndicator(context);
+    Dialogs.circularProgressIndicatorDialog(context);
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email.toString(), password: password.toString());
@@ -157,7 +158,7 @@ class AuthController extends GetxController {
 
   signInWithGoogle(
       {required bool isSignInPage, required BuildContext context}) async {
-    Dialogs.circularProgressIndicator(context);
+    Dialogs.circularProgressIndicatorDialog(context);
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication? googleAuth =
@@ -213,7 +214,7 @@ class AuthController extends GetxController {
 
   signInWithFacebook(
       {required bool isSignInPage, required BuildContext context}) async {
-    Dialogs.circularProgressIndicator(context);
+    Dialogs.circularProgressIndicatorDialog(context);
     try {
       final LoginResult loginResult = await _facebookAuth.login();
       final OAuthCredential facebookAuthCredential =
@@ -262,8 +263,6 @@ class AuthController extends GetxController {
       );
     }
   }
-
-  //TODO:
 
   forgotPassword(String email) async {
     try {

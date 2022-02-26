@@ -145,4 +145,46 @@ class DbController4 extends GetxController {
   }
 }
 
+class DbController5 extends GetxController {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  saveRequestBuddiesInfo(String? selfGoalId, String? goalId) async {
+    return _firestore
+        .collection(FirebaseConst.goals)
+        .doc(selfGoalId)
+        .collection(FirebaseConst.requestBuddies)
+        .add(
+      {
+        FirebaseConst.goalId: goalId,
+      },
+    ).catchError(
+      (error) {
+        Get.defaultDialog(
+          title: StringConst.error,
+          middleText: StringConst.anUnexpectedError,
+        );
+      },
+    );
+  }
+
+  savePendingRequests(String? selfGoalId, String? goalId) async {
+    return _firestore
+        .collection(FirebaseConst.goals)
+        .doc(goalId)
+        .collection(FirebaseConst.pendingRequests)
+        .add(
+      {
+        FirebaseConst.goalId: selfGoalId,
+      },
+    ).catchError(
+      (error) {
+        Get.defaultDialog(
+          title: StringConst.error,
+          middleText: StringConst.anUnexpectedError,
+        );
+      },
+    );
+  }
+}
+
 //TODO:

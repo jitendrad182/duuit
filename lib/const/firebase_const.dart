@@ -16,4 +16,8 @@ class FirebaseConst {
   static const String goalDescription = 'goalDescription';
   static const String weekDuration = 'weekDuration';
   static const String successDay = 'successDay';
+
+  static const String requestBuddies = 'requestBuddies';
+
+  static const String pendingRequests = 'pendingRequests';
 }

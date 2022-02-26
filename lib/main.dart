@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
       title: StringConst.appTitle,
       navigatorKey: navigatorKey,
       initialBinding: HomeBinding(),
+      //TODO:
       home: FutureBuilder(
         future: _authController.currentUser(),
         builder: (context, snapshot) {
@@ -69,7 +70,6 @@ class MyApp extends StatelessWidget {
         },
       ),
       theme: ThemeData.light().copyWith(),
-      //TODO:
       getPages: [
         GetPage(name: OnboardingPage1.id, page: () => const OnboardingPage1()),
         GetPage(name: OnboardingPage2.id, page: () => OnboardingPage2()),

@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duuit/const/string_const.dart';
+import 'package:duuit/controllers/create_profile_controller.dart';
 import 'package:duuit/models/find_goal_model.dart';
 import 'package:duuit/models/user_profile_model.dart';
+import 'package:duuit/services/auth.dart';
+import 'package:duuit/services/db_1.dart';
 import 'package:duuit/views/pages/onboarding/onboarding_page_6.dart';
 import 'package:get/get.dart';
 
@@ -193,6 +196,39 @@ class AddBuddiesController extends GetxController {
 
   userDescription(int index) {
     return userProfileModel[index].userDescription;
+  }
+}
+
+class RecapController extends GetxController {
+  final AuthController _authController = Get.find();
+  late RxString uid = ''.obs;
+  late String? avatar = '';
+  late String? userName = '';
+  late String? userDescription = '';
+
+  doThis() async {
+    uid = await _authController.uid();
+    print('uid ===== $uid');
+    print('avatar ===== $avatar');
+    if (uid.toString() == '' || uid.toString() == 'null') {
+      CreateProfileController createProfileController = Get.find();
+      avatar = createProfileController.avatarImageConst();
+      userName = createProfileController.userName();
+      userDescription = createProfileController.userDescription();
+    } else {
+      DbController2 dbController2 = Get.find();
+      avatar =
+          "assets/avatars/avatar${dbController2.userProfileModel[0].avatar}.png";
+      userName = dbController2.userProfileModel[0].userName;
+      userDescription = dbController2.userProfileModel[0].userDescription;
+    }
+    print('avatar ===== $avatar');
+  }
+
+  @override
+  void onInit() async {
+    super.onInit();
+    await doThis();
   }
 }
 
