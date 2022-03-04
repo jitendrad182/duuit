@@ -1,6 +1,7 @@
 import 'package:duuit/const/color_const.dart';
 import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
+import 'package:duuit/controllers/find_buddies_controller.dart';
 import 'package:duuit/models/add_goal_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,17 @@ class AddGoalController extends GetxController {
     weekDuration: 1,
     successDay: 4,
   ).obs;
+
+  doThis() async {
+    final findBuddiesController = Get.put(FindBuddiesController());
+    findBuddiesController.fetchBuddiesGoalInfo();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    doThis();
+  }
 
   String goalCategoryName() {
     return _addGoal.value.goalCategoryName;

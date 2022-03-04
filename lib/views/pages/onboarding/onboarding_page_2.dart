@@ -34,6 +34,11 @@ class OnboardingPage2 extends StatelessWidget {
     }
   }
 
+  void onTap2() {
+    FocusManager.instance.primaryFocus!.unfocus();
+    Get.to(() => AvatarChoosePage());
+  }
+
   @override
   Widget build(BuildContext context) {
     AppSizes.mediaQueryHeightWidth();
@@ -73,10 +78,7 @@ class OnboardingPage2 extends StatelessWidget {
                     ),
                   ],
                 ),
-                onTap: () {
-                  FocusManager.instance.primaryFocus!.unfocus();
-                  Get.to(() => AvatarChoosePage());
-                },
+                onTap: onTap2,
               ),
               SizedBox(height: AppSizes.height10 * 2),
               Form(

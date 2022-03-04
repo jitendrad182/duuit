@@ -17,7 +17,7 @@ class FirebaseConst {
   static const String weekDuration = 'weekDuration';
   static const String successDay = 'successDay';
 
-  static const String requestBuddies = 'requestBuddies';
+  static const String requestedBuddies = 'requestedBuddies';
 
   static const String pendingRequests = 'pendingRequests';
 }

@@ -5,16 +5,18 @@ import 'package:duuit/controllers/add_goal_controller.dart';
 import 'package:duuit/controllers/create_profile_controller.dart';
 import 'package:duuit/models/find_goal_model.dart';
 import 'package:duuit/models/user_profile_model.dart';
-import 'package:duuit/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
+//TODO:
 class DbController1 extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final CreateProfileController _createProfileController = Get.find();
 
-  Future<void> saveUserInfo({required User? user}) async {
+  Future<void> saveUserInfo() async {
+    User? user = _auth.currentUser;
     return _firestore.collection(FirebaseConst.users).doc(user!.uid).set(
       {
         FirebaseConst.userId: user.uid,
@@ -41,19 +43,13 @@ class DbController2 extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final RxList<UserProfileModel> userProfileModel = <UserProfileModel>[].obs;
 
-  final AuthController _authController = Get.find();
-
-  @override
-  void onInit() {
-    super.onInit();
-    getMyInfo();
-  }
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future getMyInfo() async {
     try {
       await _firestore
           .collection(FirebaseConst.users)
-          .doc(await _authController.uid())
+          .doc(_auth.currentUser?.uid)
           .get()
           .then((querySnapshot) async {
         userProfileModel.add(UserProfileModel(
@@ -78,14 +74,14 @@ class DbController2 extends GetxController {
   }
 }
 
-//TODO:
-
 class DbController3 extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final AddGoalController _addGoalController = Get.find();
 
-  saveUserGoalInfo({required User? user}) async {
+  saveUserGoalInfo() async {
+    User? user = _auth.currentUser;
     return _firestore.collection(FirebaseConst.goals).add(
       {
         FirebaseConst.userId: user!.uid,
@@ -107,26 +103,20 @@ class DbController3 extends GetxController {
 
 class DbController4 extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final RxList<FindGoalModel> goalModel = <FindGoalModel>[].obs;
+  final RxList<FindSelfGoalModel> goalModel = <FindSelfGoalModel>[].obs;
 
-  final AuthController _authController = Get.find();
-
-  @override
-  void onInit() {
-    super.onInit();
-    getMyGoalInfo();
-  }
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future getMyGoalInfo() async {
     try {
       await _firestore
           .collection(FirebaseConst.goals)
-          .where(FirebaseConst.userId, isEqualTo: await _authController.uid())
+          .where(FirebaseConst.userId, isEqualTo: _auth.currentUser?.uid)
           .get()
           .then(
         (querySnapshot) {
           for (var element in querySnapshot.docs) {
-            goalModel.add(FindGoalModel(
+            goalModel.add(FindSelfGoalModel(
               goalId: element.id,
               goalCategoryName: element[FirebaseConst.goalCategoryName],
               goalDescription: element[FirebaseConst.goalDescription],
@@ -152,7 +142,7 @@ class DbController5 extends GetxController {
     return _firestore
         .collection(FirebaseConst.goals)
         .doc(selfGoalId)
-        .collection(FirebaseConst.requestBuddies)
+        .collection(FirebaseConst.requestedBuddies)
         .add(
       {
         FirebaseConst.goalId: goalId,

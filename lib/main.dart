@@ -36,8 +36,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-  final AuthController _authController =
-      Get.put(AuthController(), permanent: true);
+  final _authController = Get.put(AuthController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +46,7 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       initialBinding: HomeBinding(),
       //TODO:
+      theme: ThemeData.light().copyWith(),
       home: FutureBuilder(
         future: _authController.currentUser(),
         builder: (context, snapshot) {
@@ -69,7 +69,6 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
-      theme: ThemeData.light().copyWith(),
       getPages: [
         GetPage(name: OnboardingPage1.id, page: () => const OnboardingPage1()),
         GetPage(name: OnboardingPage2.id, page: () => OnboardingPage2()),

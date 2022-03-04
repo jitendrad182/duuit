@@ -113,6 +113,7 @@ class OnboardingPage4 extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(7)),
                             ),
                             onChanged: (val) {
+                              FocusManager.instance.primaryFocus!.unfocus();
                               _controller.updateWeekDuration(val!.toInt());
                             },
                           ),
@@ -152,6 +153,7 @@ class OnboardingPage4 extends StatelessWidget {
                               );
                             }).toList(),
                             onChanged: (val) {
+                              FocusManager.instance.primaryFocus!.unfocus();
                               _controller.updateSuccessDay(val!.toInt());
                             },
                             decoration: InputDecoration(

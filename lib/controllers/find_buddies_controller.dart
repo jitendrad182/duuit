@@ -1,234 +1,232 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:duuit/const/string_const.dart';
+import 'package:duuit/const/firebase_const.dart';
+import 'package:duuit/const/image_const.dart';
 import 'package:duuit/controllers/create_profile_controller.dart';
 import 'package:duuit/models/find_goal_model.dart';
-import 'package:duuit/models/user_profile_model.dart';
 import 'package:duuit/services/auth.dart';
 import 'package:duuit/services/db_1.dart';
-import 'package:duuit/views/pages/onboarding/onboarding_page_6.dart';
 import 'package:get/get.dart';
 
 //TODO:
 
 class FindBuddiesController extends GetxController {
-  final RxList<FindGoalModel> goalModel = <FindGoalModel>[].obs;
-  final RxList<UserProfileModel> userProfileModel = <UserProfileModel>[].obs;
-
-  final RxList<bool> isExpanded = <bool>[].obs;
-  final RxList<bool> isAdded = <bool>[].obs;
+  final RxList<FindGoalModel1> findGoalModel = <FindGoalModel1>[].obs;
+  final RxList<FindGoalModel2> findGoalModel2 = <FindGoalModel2>[].obs;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final AuthController _authController = Get.find();
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchBuddiesGoalInfo();
-  }
-
+  //TODO:
   fetchBuddiesGoalInfo() async {
-    await _firestore.collection('goals').get().then(
-      (querySnapshot) async {
-        for (var element in querySnapshot.docs) {
-          goalModel.add(FindGoalModel(
-            goalId: element.id,
-            goalCategoryName: element['goalCategoryName'],
-            goalDescription: element['goalDescription'],
-            weekDuration: element['weekDuration'],
-            successDay: element['successDay'],
-          ));
-          await fetchBuddiesUserInfo(await element['userId']);
-          isExpanded.add(false);
-          isAdded.add(false);
-        }
-      },
-    );
+    if (_authController.isSignedIn == true) {
+      await _firestore
+          .collection(FirebaseConst.goals)
+          .where(FirebaseConst.userId, isNotEqualTo: _authController.userId)
+          .get()
+          .then(
+        (querySnapshot) async {
+          for (var element in querySnapshot.docs) {
+            findGoalModel.add(FindGoalModel1(
+              goalId: element.id,
+              goalCategoryName: element[FirebaseConst.goalCategoryName],
+              weekDuration: element[FirebaseConst.weekDuration],
+            ));
+            await fetchBuddiesUserInfo(await element[FirebaseConst.userId]);
+          }
+        },
+      );
+    } else {
+      await _firestore.collection(FirebaseConst.goals).get().then(
+        (querySnapshot) async {
+          for (var element in querySnapshot.docs) {
+            findGoalModel.add(FindGoalModel1(
+              goalId: element.id,
+              goalCategoryName: element[FirebaseConst.goalCategoryName],
+              weekDuration: element[FirebaseConst.weekDuration],
+            ));
+            await fetchBuddiesUserInfo(await element[FirebaseConst.userId]);
+          }
+        },
+      );
+    }
   }
+//TODO:
 
   fetchBuddiesUserInfo(String userId) async {
     await _firestore
-        .collection('users')
+        .collection(FirebaseConst.users)
         .doc(userId)
         .get()
         .then((querySnapshot) async {
-      userProfileModel.add(UserProfileModel(
+      findGoalModel2.add(FindGoalModel2(
         userId: querySnapshot.id,
-        avatar: querySnapshot.data()!['avatar'],
-        userName: querySnapshot.data()!['userName'],
-        userDescription: querySnapshot.data()!['userDescription'],
-        userAuthProvider: querySnapshot.data()!['userAuthProvider'],
-        userCreationTime: querySnapshot.data()!['userCreationTime'],
-        lastUserNameChangeTime: querySnapshot.data()!['lastUserNameChangeTime'],
+        avatar: querySnapshot.data()![FirebaseConst.avatar],
+        userName: querySnapshot.data()![FirebaseConst.userName],
+        userDescription: querySnapshot.data()![FirebaseConst.userDescription],
+        expandedVal: false,
+        checkboxVal: false,
       ));
     });
   }
 
-  expanded(int index) {
-    return isExpanded[index];
-  }
-
-  updateExpanded(int index) {
-    if (isExpanded[index]) {
-      isExpanded[index] = false;
+  updateExpandedVal(int index) {
+    if (findGoalModel2[index].expandedVal) {
+      findGoalModel2[index].expandedVal = false;
     } else {
-      isExpanded[index] = true;
+      findGoalModel2[index].expandedVal = true;
     }
   }
 
-  checkbox(int index) {
-    return isAdded[index];
+  updateCheckboxVal(int index) {
+    if (findGoalModel2[index].checkboxVal) {
+      findGoalModel2[index].checkboxVal = false;
+    } else {
+      findGoalModel2[index].checkboxVal = true;
+    }
   }
 
-  updateCheckbox(int index) {
-    if (isAdded[index]) {
-      isAdded[index] = false;
-    } else {
-      isAdded[index] = true;
-    }
+  goalId(int index) {
+    return findGoalModel[index].goalId;
   }
 
   goalCategoryName(int index) {
-    return goalModel[index].goalCategoryName;
-  }
-
-  goalDescription(int index) {
-    return goalModel[index].goalDescription;
+    return findGoalModel[index].goalCategoryName;
   }
 
   weekDuration(int index) {
-    return goalModel[index].weekDuration;
-  }
-
-  successDay(int index) {
-    return goalModel[index].successDay;
+    return findGoalModel[index].weekDuration;
   }
 
   avatar(int index) {
-    return "assets/avatars/avatar${userProfileModel[index].avatar}.png";
+    return ImageConst.avatar(findGoalModel2[index].avatar);
   }
 
   userName(int index) {
-    return userProfileModel[index].userName;
+    return findGoalModel2[index].userName;
   }
 
   userDescription(int index) {
-    return userProfileModel[index].userDescription;
+    return findGoalModel2[index].userDescription;
   }
 }
 
+class AddBuddiesModel {
+  late String goalId;
+  late String goalCategoryName;
+  late int weekDuration;
+
+  late int avatar;
+  late String userName;
+  late String userDescription;
+
+  late bool expandedVal;
+
+  AddBuddiesModel({
+    required this.goalId,
+    required this.goalCategoryName,
+    required this.weekDuration,
+    required this.avatar,
+    required this.userName,
+    required this.userDescription,
+    required this.expandedVal,
+  });
+}
+
 class AddBuddiesController extends GetxController {
-  final RxList<FindGoalModel> goalModel = <FindGoalModel>[].obs;
-  final RxList<UserProfileModel> userProfileModel = <UserProfileModel>[].obs;
+  final RxList<AddBuddiesModel> addBuddiesModel = <AddBuddiesModel>[].obs;
 
-  final RxList<bool> isExpand = <bool>[].obs;
+  final FindBuddiesController _findBuddiesController = Get.find();
 
-  addBuddies(FindBuddiesController controller) async {
-    goalModel.removeRange(0, goalModel.length);
-    userProfileModel.removeRange(0, userProfileModel.length);
-    isExpand.removeRange(0, isExpand.length);
-
-    for (int index = 0; index < controller.isAdded.length; index++) {
-      if (controller.isAdded[index] == true) {
-        goalModel.add(FindGoalModel(
-          goalId: controller.goalModel[index].goalId,
-          goalCategoryName: controller.goalCategoryName(index),
-          goalDescription: controller.goalDescription(index),
-          weekDuration: controller.weekDuration(index),
-          successDay: controller.successDay(index),
-        ));
-        userProfileModel.add(UserProfileModel(
-          userId: controller.userProfileModel[index].userId,
-          avatar: controller.userProfileModel[index].avatar,
-          userName: controller.userName(index),
-          userDescription: controller.userDescription(index),
-          userAuthProvider: controller.userProfileModel[index].userAuthProvider,
-          userCreationTime: controller.userProfileModel[index].userCreationTime,
-          lastUserNameChangeTime:
-              controller.userProfileModel[index].lastUserNameChangeTime,
-        ));
-        isExpand.add(false);
-      }
-    }
-    if (goalModel.isEmpty) {
-      Get.defaultDialog(
-        title: StringConst.error,
-        middleText: StringConst.atLeastAddOneBuddie,
-      );
-    } else {
-      Get.to(() => OnboardingPage6());
-    }
+  addBuddies(int index) async {
+    addBuddiesModel.add(AddBuddiesModel(
+      goalId: _findBuddiesController.goalId(index),
+      goalCategoryName: _findBuddiesController.goalCategoryName(index),
+      weekDuration: _findBuddiesController.weekDuration(index),
+      avatar: _findBuddiesController.findGoalModel2[index].avatar,
+      userName: _findBuddiesController.findGoalModel2[index].userName,
+      userDescription:
+          _findBuddiesController.findGoalModel2[index].userDescription,
+      expandedVal: false,
+    ));
   }
 
-  expanded(int index) {
-    return isExpand[index];
+  removeBuddies(int index) async {
+    addBuddiesModel.removeWhere(
+        (element) => element.goalId == _findBuddiesController.goalId(index));
   }
 
-  updateExpanded(int index) {
-    if (isExpand[index]) {
-      isExpand[index] = false;
+  updateExpandedVal(int index) {
+    if (addBuddiesModel[index].expandedVal) {
+      addBuddiesModel[index].expandedVal = false;
     } else {
-      isExpand[index] = true;
+      addBuddiesModel[index].expandedVal = true;
     }
   }
 
   goalCategoryName(int index) {
-    return goalModel[index].goalCategoryName;
-  }
-
-  goalDescription(int index) {
-    return goalModel[index].goalDescription;
+    return addBuddiesModel[index].goalCategoryName;
   }
 
   weekDuration(int index) {
-    return goalModel[index].weekDuration;
-  }
-
-  successDay(int index) {
-    return goalModel[index].successDay;
+    return addBuddiesModel[index].weekDuration;
   }
 
   avatar(int index) {
-    return "assets/avatars/avatar${userProfileModel[index].avatar}.png";
+    return ImageConst.avatar(addBuddiesModel[index].avatar);
   }
 
   userName(int index) {
-    return userProfileModel[index].userName;
+    return addBuddiesModel[index].userName;
   }
 
   userDescription(int index) {
-    return userProfileModel[index].userDescription;
+    return addBuddiesModel[index].userDescription;
   }
 }
 
 class RecapController extends GetxController {
   final AuthController _authController = Get.find();
-  late RxString uid = ''.obs;
-  late String? avatar = '';
-  late String? userName = '';
-  late String? userDescription = '';
 
-  doThis() async {
-    uid = await _authController.uid();
-    print('uid ===== $uid');
-    print('avatar ===== $avatar');
-    if (uid.toString() == '' || uid.toString() == 'null') {
-      CreateProfileController createProfileController = Get.find();
-      avatar = createProfileController.avatarImageConst();
-      userName = createProfileController.userName();
-      userDescription = createProfileController.userDescription();
-    } else {
-      DbController2 dbController2 = Get.find();
-      avatar =
-          "assets/avatars/avatar${dbController2.userProfileModel[0].avatar}.png";
-      userName = dbController2.userProfileModel[0].userName;
-      userDescription = dbController2.userProfileModel[0].userDescription;
-    }
-    print('avatar ===== $avatar');
-  }
+  bool? dbController2IsInitialized;
+  bool? isSignedIn;
+  late CreateProfileController _createProfileController;
+  late DbController2 _dbController2;
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    await doThis();
+
+    dbController2IsInitialized = _authController.dbController2IsInitialized;
+    isSignedIn = _authController.isSignedIn;
+    if (dbController2IsInitialized == true) {
+      _dbController2 = Get.find();
+    } else {
+      _createProfileController = Get.find();
+    }
+  }
+
+  avatar() {
+    if (dbController2IsInitialized == true) {
+      return ImageConst.avatar(_dbController2.userProfileModel[0].avatar);
+    } else {
+      return _createProfileController.avatarImageConst();
+    }
+  }
+
+  userName() {
+    if (dbController2IsInitialized == true) {
+      return _dbController2.userProfileModel[0].userName;
+    } else {
+      return _createProfileController.userName();
+    }
+  }
+
+  userDescription() {
+    if (dbController2IsInitialized == true) {
+      return _dbController2.userProfileModel[0].userDescription;
+    } else {
+      return _createProfileController.userDescription();
+    }
   }
 }
 

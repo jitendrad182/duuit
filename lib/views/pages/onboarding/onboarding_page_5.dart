@@ -3,6 +3,7 @@ import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
 import 'package:duuit/controllers/find_buddies_controller.dart';
 import 'package:duuit/utils/app_sizes.dart';
+import 'package:duuit/views/pages/onboarding/onboarding_page_6.dart';
 import 'package:duuit/views/widgets/custom_app_bars/custom_app_bar_2.dart';
 import 'package:duuit/views/widgets/custom_buttons/custom_button_2.dart';
 import 'package:duuit/views/widgets/custom_titles/custom_title_2.dart';
@@ -16,11 +17,8 @@ class OnboardingPage5 extends StatelessWidget {
 
   static const id = '/OnboardingPage5';
 
-  final FindBuddiesController _findBuddiesController =
-      Get.put(FindBuddiesController());
-
-  final AddBuddiesController _addBuddiesController =
-      Get.put(AddBuddiesController());
+  final FindBuddiesController _findBuddiesController = Get.find();
+  final _addBuddiesController = Get.put(AddBuddiesController());
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +27,7 @@ class OnboardingPage5 extends StatelessWidget {
       body: SafeArea(
         child: Obx(
           () {
-            return _findBuddiesController.goalModel.length < 2
+            return _findBuddiesController.findGoalModel.length < 2
                 ? const Center(child: CircularProgressIndicator())
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,14 +53,14 @@ class OnboardingPage5 extends StatelessWidget {
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
                           itemCount:
-                              _findBuddiesController.userProfileModel.length,
+                              _findBuddiesController.findGoalModel2.length,
                           itemBuilder: (context, index) {
                             return Column(
                               children: [
                                 Obx(
                                   () {
                                     return _findBuddiesController
-                                            .expanded(index)
+                                            .findGoalModel2[index].expandedVal
                                         ? CustomExpansionPanel2(
                                             controller: _findBuddiesController,
                                             index: index,
@@ -84,8 +82,7 @@ class OnboardingPage5 extends StatelessWidget {
                         child: CustomButton2(
                           text: StringConst.continueButtonString,
                           onTap: () {
-                            _addBuddiesController
-                                .addBuddies(_findBuddiesController);
+                            Get.to(() => OnboardingPage6());
                           },
                         ),
                       ),
@@ -107,14 +104,15 @@ class OnboardingPage5 extends StatelessWidget {
 }
 
 class CustomExpansionPanel1 extends StatelessWidget {
-  const CustomExpansionPanel1({
-    Key? key,
-    required this.controller,
-    required this.index,
-  }) : super(key: key);
+  CustomExpansionPanel1(
+      {Key? key, required this.controller, required this.index})
+      : super(key: key);
 
   final FindBuddiesController controller;
   final int index;
+
+  final AddBuddiesController _addBuddiesController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -139,9 +137,14 @@ class CustomExpansionPanel1 extends StatelessWidget {
               Obx(
                 () {
                   return Checkbox(
-                    value: controller.checkbox(index),
+                    value: controller.findGoalModel2[index].checkboxVal,
                     onChanged: (val) {
-                      controller.updateCheckbox(index);
+                      controller.updateCheckboxVal(index);
+                      if (val == true) {
+                        _addBuddiesController.addBuddies(index);
+                      } else {
+                        _addBuddiesController.removeBuddies(index);
+                      }
                     },
                   );
                 },
@@ -207,7 +210,7 @@ class CustomExpansionPanel1 extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    controller.updateExpanded(index);
+                    controller.updateExpandedVal(index);
                   },
                 ),
               ),
@@ -220,7 +223,7 @@ class CustomExpansionPanel1 extends StatelessWidget {
 }
 
 class CustomExpansionPanel2 extends StatelessWidget {
-  const CustomExpansionPanel2({
+  CustomExpansionPanel2({
     Key? key,
     required this.controller,
     required this.index,
@@ -228,6 +231,8 @@ class CustomExpansionPanel2 extends StatelessWidget {
 
   final FindBuddiesController controller;
   final int index;
+
+  final AddBuddiesController _addBuddiesController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -256,9 +261,14 @@ class CustomExpansionPanel2 extends StatelessWidget {
                   Obx(
                     () {
                       return Checkbox(
-                        value: controller.checkbox(index),
+                        value: controller.findGoalModel2[index].checkboxVal,
                         onChanged: (val) {
-                          controller.updateCheckbox(index);
+                          controller.updateCheckboxVal(index);
+                          if (val == true) {
+                            _addBuddiesController.addBuddies(index);
+                          } else {
+                            _addBuddiesController.removeBuddies(index);
+                          }
                         },
                       );
                     },
@@ -277,57 +287,58 @@ class CustomExpansionPanel2 extends StatelessWidget {
                   Expanded(
                     flex: 5,
                     child: GestureDetector(
-                        child: Container(
-                          color: ColorConst.whiteColor,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: AppSizes.width10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      controller.userName(index),
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const Icon(Icons.keyboard_arrow_up_rounded),
-                                  ],
-                                ),
+                      child: Container(
+                        color: ColorConst.whiteColor,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: AppSizes.width10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    controller.userName(index),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const Icon(Icons.keyboard_arrow_up_rounded),
+                                ],
                               ),
-                              SizedBox(height: AppSizes.height10 * 1.5),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: AppSizes.width10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      controller.goalCategoryName(index),
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: AppSizes.width10 * 1.3),
+                            ),
+                            SizedBox(height: AppSizes.height10 * 1.5),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: AppSizes.width10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    controller.goalCategoryName(index),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: AppSizes.width10 * 1.3),
+                                  ),
+                                  Text(
+                                    'For ${controller.weekDuration(index)} weeks',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: AppSizes.width10 * 1.3,
                                     ),
-                                    Text(
-                                      'For ${controller.weekDuration(index)} weeks',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: AppSizes.width10 * 1.3,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        onTap: () {
-                          controller.updateExpanded(index);
-                        }),
+                      ),
+                      onTap: () {
+                        controller.updateExpandedVal(index);
+                      },
+                    ),
                   ),
                 ],
               ),

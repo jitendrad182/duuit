@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duuit/bindings/home_binding.dart';
 import 'package:duuit/const/string_const.dart';
 import 'package:duuit/main.dart';
@@ -14,57 +13,56 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+//TODO:
+
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FacebookAuth _facebookAuth = FacebookAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  bool? isSignedIn;
+  User? user;
+  String? userId;
+  DateTime? creationTime;
+  DateTime? lastSignInTime;
+  String? authProviderId;
 
   int? userInfo;
   int? userGoalInfo;
 
+  bool createProfileControllerIsInitialized = false;
+  bool dbController2IsInitialized = false;
+
   currentUser() async {
-    await getUserInfo();
-    await getUserGoalInfo();
+    if (_auth.currentUser?.uid == null) {
+      isSignedIn = false;
+    } else {
+      await doThis();
+      await getUserInfo();
+      await getUserGoalInfo();
+    }
     return _auth.currentUser;
   }
 
+  doThis() async {
+    isSignedIn = true;
+    user = _auth.currentUser;
+    userId = _auth.currentUser?.uid;
+    creationTime = _auth.currentUser!.metadata.creationTime;
+    lastSignInTime = _auth.currentUser!.metadata.lastSignInTime;
+    authProviderId = _auth.currentUser!.providerData[0].providerId;
+  }
+
   getUserInfo() async {
-    await _firestore
-        .collection('users')
-        .where('userId', isEqualTo: _auth.currentUser?.uid.toString())
-        .get()
-        .then((querySnapshot) async {
-      userInfo = querySnapshot.docs.length;
-    });
+    final dbController2 = Get.put(DbController2(), permanent: true);
+    await dbController2.getMyInfo();
+    userInfo = dbController2.userProfileModel.length;
   }
 
   getUserGoalInfo() async {
-    await _firestore
-        .collection('goals')
-        .where('userId', isEqualTo: _auth.currentUser?.uid.toString())
-        .get()
-        .then(
-      (querySnapshot) async {
-        userGoalInfo = querySnapshot.docs.length;
-      },
-    );
-  }
-
-  uid() async {
-    return _auth.currentUser?.uid;
-  }
-
-  creationTime() async {
-    return _auth.currentUser!.metadata.creationTime;
-  }
-
-  lastSignInTime() async {
-    return _auth.currentUser!.metadata.creationTime;
-  }
-
-  authProviderId() async {
-    return _auth.currentUser!.providerData[0].providerId;
+    final dbController4 = Get.put(DbController4(), permanent: true);
+    await dbController4.getMyGoalInfo();
+    userGoalInfo = dbController4.goalModel.length;
   }
 
   signOut() async {
@@ -74,7 +72,6 @@ class AuthController extends GetxController {
     Get.offAll(() => const OnboardingPage1());
   }
 
-  //TODO:
   createUser(
       {String? email, String? password, required BuildContext context}) async {
     Dialogs.circularProgressIndicatorDialog(context);
@@ -86,12 +83,9 @@ class AuthController extends GetxController {
       );
       User? user = userCredential.user;
       if (user != null) {
-        await DbController1().saveUserInfo(user: user).then((value) async {
-          await DbController3().saveUserGoalInfo(user: user).then((val) async {
-            await getUserInfo();
-            await getUserGoalInfo();
-            Get.offAll(() => HomePage(), binding: HomeBinding());
-          });
+        await doThis();
+        await DbController1().saveUserInfo().then((value) async {
+          await DbController3().saveUserGoalInfo().then((val) async {});
         });
       } else {
         navigatorKey.currentState!.pop();
@@ -123,6 +117,7 @@ class AuthController extends GetxController {
           email: email.toString(), password: password.toString());
       User? user = userCredential.user;
       if (user != null) {
+        await doThis();
         await getUserInfo();
         await getUserGoalInfo();
         if (userInfo! < 1) {
@@ -172,6 +167,7 @@ class AuthController extends GetxController {
       User? user = userCredential.user;
       if (user != null) {
         if (isSignInPage) {
+          await doThis();
           await getUserInfo();
           await getUserGoalInfo();
           if (userInfo! < 1) {
@@ -184,8 +180,8 @@ class AuthController extends GetxController {
             }
           }
         } else {
-          await DbController1().saveUserInfo(user: user).then((value) async {
-            await DbController3().saveUserGoalInfo(user: user).then((val) {
+          await DbController1().saveUserInfo().then((value) async {
+            await DbController3().saveUserGoalInfo().then((val) {
               Get.offAll(() => HomePage(), binding: HomeBinding());
             });
           });
@@ -224,6 +220,7 @@ class AuthController extends GetxController {
       User? user = userCredential.user;
       if (user != null) {
         if (isSignInPage) {
+          await doThis();
           await getUserInfo();
           await getUserGoalInfo();
           if (userInfo! < 1) {
@@ -236,8 +233,8 @@ class AuthController extends GetxController {
             }
           }
         } else {
-          await DbController1().saveUserInfo(user: user).then((value) async {
-            await DbController3().saveUserGoalInfo(user: user).then((val) {
+          await DbController1().saveUserInfo().then((value) async {
+            await DbController3().saveUserGoalInfo().then((val) {
               Get.offAll(() => HomePage(), binding: HomeBinding());
             });
           });
@@ -289,6 +286,6 @@ class AuthController extends GetxController {
       );
     }
   }
-
-  //TODO:
 }
+
+//TODO:

@@ -20,6 +20,7 @@ class ForgotPasswordPage extends StatelessWidget {
 
   void onTap() async {
     if (_key.currentState!.validate()) {
+      FocusManager.instance.primaryFocus!.unfocus();
       await _controller.forgotPassword(_emailController.text.trim());
     }
   }

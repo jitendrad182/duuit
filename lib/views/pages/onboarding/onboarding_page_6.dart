@@ -42,7 +42,7 @@ class OnboardingPage6 extends StatelessWidget {
               child: Row(
                 children: [
                   Image.asset(
-                    _recapController.avatar.toString(),
+                    _recapController.avatar(),
                     height: AppSizes.height10 * 12,
                   ),
                   Expanded(
@@ -55,13 +55,13 @@ class OnboardingPage6 extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _recapController.userName.toString(),
+                            _recapController.userName(),
                             style: TextStyle(
                                 fontSize: AppSizes.height10 * 2.2,
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            _recapController.userDescription.toString(),
+                            _recapController.userDescription(),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 4,
                             style: TextStyle(
@@ -219,18 +219,18 @@ class OnboardingPage6 extends StatelessWidget {
             SizedBox(height: AppSizes.height10 * 1.5),
             Expanded(
               child: Obx(() {
-                return _addBuddiesController.goalModel.isEmpty
+                return _addBuddiesController.addBuddiesModel.isEmpty
                     ? const Center(child: CircularProgressIndicator())
                     : ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount:
-                            _addBuddiesController.userProfileModel.length,
+                        itemCount: _addBuddiesController.addBuddiesModel.length,
                         itemBuilder: (context, index) {
                           return Column(
                             children: [
                               Obx(() {
-                                return _addBuddiesController.isExpand[index]
+                                return _addBuddiesController
+                                        .addBuddiesModel[index].expandedVal
                                     ? CustomExpansionPanel4(
                                         controller: _addBuddiesController,
                                         index: index,
@@ -455,7 +455,7 @@ class CustomExpansionPanel3 extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    controller.updateExpanded(index);
+                    controller.updateExpandedVal(index);
                   },
                 ),
               ),
@@ -565,7 +565,7 @@ class CustomExpansionPanel4 extends StatelessWidget {
                           ),
                         ),
                         onTap: () {
-                          controller.updateExpanded(index);
+                          controller.updateExpandedVal(index);
                         }),
                   ),
                 ],

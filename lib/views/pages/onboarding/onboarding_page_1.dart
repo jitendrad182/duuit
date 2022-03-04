@@ -56,6 +56,7 @@ class OnboardingPage1 extends StatelessWidget {
                     color: ColorConst.primaryColor,
                     textColor: ColorConst.whiteColor,
                     onTap: () {
+                      FocusManager.instance.primaryFocus!.unfocus();
                       Get.to(() => OnboardingPage2());
                     },
                   ),
@@ -65,6 +66,7 @@ class OnboardingPage1 extends StatelessWidget {
                     color: ColorConst.whiteColor,
                     textColor: ColorConst.blackColor,
                     onTap: () {
+                      FocusManager.instance.primaryFocus!.unfocus();
                       Get.to(() => SignInPage());
                     },
                   )

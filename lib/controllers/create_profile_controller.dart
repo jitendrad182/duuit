@@ -1,5 +1,6 @@
 import 'package:duuit/const/image_const.dart';
 import 'package:duuit/models/create_profile_model.dart';
+import 'package:duuit/services/auth.dart';
 import 'package:get/get.dart';
 
 class CreateProfileController extends GetxController {
@@ -8,6 +9,14 @@ class CreateProfileController extends GetxController {
     userName: 'UserName',
     userDescription: 'User Description.......',
   ).obs;
+
+  final AuthController _authController = Get.find();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _authController.createProfileControllerIsInitialized = true;
+  }
 
   int avatar() {
     return _createProfile.value.avatar;
