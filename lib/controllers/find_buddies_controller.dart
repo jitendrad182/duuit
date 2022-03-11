@@ -17,7 +17,7 @@ class FindBuddiesController extends GetxController {
   final AuthController _authController = Get.find();
 
   //TODO:
-  fetchBuddiesGoalInfo() async {
+  fetchBuddiesGoalInfo(String goalCategoryName) async {
     if (_authController.isSignedIn == true) {
       await _firestore
           .collection(FirebaseConst.goals)

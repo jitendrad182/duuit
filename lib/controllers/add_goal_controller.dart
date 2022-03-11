@@ -14,16 +14,12 @@ class AddGoalController extends GetxController {
     successDay: 4,
   ).obs;
 
-  doThis() async {
+  //TODO:
+  doThis(String goalCategoryName) async {
     final findBuddiesController = Get.put(FindBuddiesController());
-    findBuddiesController.fetchBuddiesGoalInfo();
+    findBuddiesController.fetchBuddiesGoalInfo(goalCategoryName);
   }
-
-  @override
-  void onInit() {
-    super.onInit();
-    doThis();
-  }
+  //TODO:
 
   String goalCategoryName() {
     return _addGoal.value.goalCategoryName;
@@ -74,6 +70,7 @@ class AddGoalController extends GetxController {
   void updateGoalCategory(String goalCategoryName) {
     _addGoal.update((val) {
       val!.goalCategoryName = goalCategoryName;
+      doThis(goalCategoryName);
     });
   }
 
