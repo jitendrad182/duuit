@@ -1,6 +1,7 @@
 import 'package:duuit/const/color_const.dart';
 import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
+import 'package:duuit/controllers/add_buddies_controller.dart';
 import 'package:duuit/controllers/find_buddies_controller.dart';
 import 'package:duuit/utils/app_sizes.dart';
 import 'package:duuit/views/pages/onboarding/onboarding_page_6.dart';
@@ -60,14 +61,18 @@ class OnboardingPage5 extends StatelessWidget {
                                 Obx(
                                   () {
                                     return _findBuddiesController
-                                            .findGoalModel2[index].expandedVal
+                                            .expandedVal[index]
                                         ? CustomExpansionPanel2(
                                             controller: _findBuddiesController,
                                             index: index,
+                                            addBuddiesController:
+                                                _addBuddiesController,
                                           )
                                         : CustomExpansionPanel1(
                                             controller: _findBuddiesController,
                                             index: index,
+                                            addBuddiesController:
+                                                _addBuddiesController,
                                           );
                                   },
                                 ),
@@ -82,7 +87,13 @@ class OnboardingPage5 extends StatelessWidget {
                         child: CustomButton2(
                           text: StringConst.continueButtonString,
                           onTap: () {
-                            Get.to(() => OnboardingPage6());
+                            if (_addBuddiesController.addBuddiesModel.isEmpty) {
+                              Get.defaultDialog(
+                                  title: StringConst.error,
+                                  middleText: StringConst.atLeastAddOneBuddie);
+                            } else {
+                              Get.to(() => OnboardingPage6());
+                            }
                           },
                         ),
                       ),
@@ -104,14 +115,17 @@ class OnboardingPage5 extends StatelessWidget {
 }
 
 class CustomExpansionPanel1 extends StatelessWidget {
-  CustomExpansionPanel1(
-      {Key? key, required this.controller, required this.index})
-      : super(key: key);
+  const CustomExpansionPanel1({
+    Key? key,
+    required this.controller,
+    required this.index,
+    required this.addBuddiesController,
+  }) : super(key: key);
 
   final FindBuddiesController controller;
   final int index;
 
-  final AddBuddiesController _addBuddiesController = Get.find();
+  final AddBuddiesController addBuddiesController;
 
   @override
   Widget build(BuildContext context) {
@@ -137,13 +151,13 @@ class CustomExpansionPanel1 extends StatelessWidget {
               Obx(
                 () {
                   return Checkbox(
-                    value: controller.findGoalModel2[index].checkboxVal,
+                    value: controller.checkboxVal[index],
                     onChanged: (val) {
                       controller.updateCheckboxVal(index);
                       if (val == true) {
-                        _addBuddiesController.addBuddies(index);
+                        addBuddiesController.addBuddies(index);
                       } else {
-                        _addBuddiesController.removeBuddies(index);
+                        addBuddiesController.removeBuddies(index);
                       }
                     },
                   );
@@ -152,7 +166,7 @@ class CustomExpansionPanel1 extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   child: Image.asset(
-                    controller.avatar(index),
+                    controller.avatarImageConst(index),
                     height: AppSizes.height10 * 5.5,
                   ),
                   //TODO:
@@ -223,16 +237,17 @@ class CustomExpansionPanel1 extends StatelessWidget {
 }
 
 class CustomExpansionPanel2 extends StatelessWidget {
-  CustomExpansionPanel2({
+  const CustomExpansionPanel2({
     Key? key,
     required this.controller,
     required this.index,
+    required this.addBuddiesController,
   }) : super(key: key);
 
   final FindBuddiesController controller;
   final int index;
 
-  final AddBuddiesController _addBuddiesController = Get.find();
+  final AddBuddiesController addBuddiesController;
 
   @override
   Widget build(BuildContext context) {
@@ -261,13 +276,13 @@ class CustomExpansionPanel2 extends StatelessWidget {
                   Obx(
                     () {
                       return Checkbox(
-                        value: controller.findGoalModel2[index].checkboxVal,
+                        value: controller.checkboxVal[index],
                         onChanged: (val) {
                           controller.updateCheckboxVal(index);
                           if (val == true) {
-                            _addBuddiesController.addBuddies(index);
+                            addBuddiesController.addBuddies(index);
                           } else {
-                            _addBuddiesController.removeBuddies(index);
+                            addBuddiesController.removeBuddies(index);
                           }
                         },
                       );
@@ -276,7 +291,7 @@ class CustomExpansionPanel2 extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       child: Image.asset(
-                        controller.avatar(index),
+                        controller.avatarImageConst(index),
                         height: AppSizes.height10 * 5.5,
                       ),
                       //TODO:

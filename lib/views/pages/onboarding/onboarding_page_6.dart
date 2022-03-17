@@ -1,10 +1,15 @@
+import 'package:duuit/bindings/home_binding.dart';
 import 'package:duuit/const/color_const.dart';
 import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
+import 'package:duuit/controllers/add_buddies_controller.dart';
 import 'package:duuit/controllers/add_goal_controller.dart';
-import 'package:duuit/controllers/find_buddies_controller.dart';
+import 'package:duuit/controllers/recap_controller.dart';
 import 'package:duuit/services/auth.dart';
+import 'package:duuit/services/db_1.dart';
 import 'package:duuit/utils/app_sizes.dart';
+import 'package:duuit/views/dialogs/dialogs.dart';
+import 'package:duuit/views/pages/home/home.dart';
 import 'package:duuit/views/pages/onboarding/sign_up_page.dart';
 import 'package:duuit/views/widgets/custom_app_bars/custom_app_bar_2.dart';
 import 'package:duuit/views/widgets/custom_buttons/custom_button_2.dart';
@@ -229,8 +234,7 @@ class OnboardingPage6 extends StatelessWidget {
                           return Column(
                             children: [
                               Obx(() {
-                                return _addBuddiesController
-                                        .addBuddiesModel[index].expandedVal
+                                return _addBuddiesController.expandedVal[index]
                                     ? CustomExpansionPanel4(
                                         controller: _addBuddiesController,
                                         index: index,
@@ -250,103 +254,116 @@ class OnboardingPage6 extends StatelessWidget {
             SizedBox(height: AppSizes.height10 * 1.5),
             CustomButton2(
               text: 'Finalize',
-              onTap: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (_) {
-                      return SizedBox(
-                        height: AppSizes.height10 * 30,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: AppSizes.width10,
-                              vertical: AppSizes.height10 * 2),
-                          child: Column(
-                            children: [
-                              Text(
-                                'Add Account',
-                                style: TextStyle(
-                                    fontSize: AppSizes.height10 * 2.2,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: AppSizes.height10 * 3,
-                              ),
-                              CustomButton3(
-                                text: StringConst.signUpWithGoogle,
-                                image: ImageConst.google,
-                                color: ColorConst.whiteColor,
-                                onTap: () {
-                                  _authController.signInWithGoogle(
-                                      isSignInPage: false, context: context);
-                                },
-                              ),
-                              SizedBox(
-                                height: AppSizes.height10 * 2,
-                              ),
-                              CustomButton3(
-                                text: StringConst.signUpWithFb,
-                                image: ImageConst.fb,
-                                color: ColorConst.whiteColor,
-                                onTap: () {
-                                  _authController.signInWithFacebook(
-                                      isSignInPage: false, context: context);
-                                },
-                              ),
-                              SizedBox(
-                                height: AppSizes.height10 * 2,
-                              ),
-                              GestureDetector(
-                                child: Container(
-                                  height: AppSizes.height10 * 4.5,
-                                  decoration: BoxDecoration(
-                                    color: ColorConst.whiteColor,
-                                    borderRadius: BorderRadius.circular(8),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: ColorConst.greyColor
-                                            .withOpacity(0.5),
-                                        spreadRadius: 1,
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: AppSizes.height10,
-                                        horizontal: AppSizes.width10 * 2),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Icon(
-                                          Icons.email,
-                                          size: AppSizes.height10 * 2.3,
-                                          color: ColorConst.primaryColor,
-                                        ),
-                                        SizedBox(width: AppSizes.width10),
-                                        Text(
-                                          StringConst.signUpWithEmail,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: ColorConst.blackColor,
-                                            fontSize: AppSizes.height10 * 1.8,
-                                          ),
+              onTap: () async {
+                if (_authController.isSignedIn == true) {
+                  Dialogs.circularProgressIndicatorDialog(context);
+                  await DbController3().saveUserGoalInfo().then((val) async {
+                    final DbController4 dbController4 =
+                        Get.put(DbController4());
+                    await dbController4.getMyGoalInfo();
+                    Get.offAll(HomePage(), binding: HomeBinding());
+                    final AddBuddiesController addBuddiesController =
+                        Get.find();
+                    await addBuddiesController.saveBuddies(dbController4);
+                  });
+                } else {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (_) {
+                        return SizedBox(
+                          height: AppSizes.height10 * 30,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: AppSizes.width10,
+                                vertical: AppSizes.height10 * 2),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Add Account',
+                                  style: TextStyle(
+                                      fontSize: AppSizes.height10 * 2.2,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: AppSizes.height10 * 3,
+                                ),
+                                CustomButton3(
+                                  text: StringConst.signUpWithGoogle,
+                                  image: ImageConst.google,
+                                  color: ColorConst.whiteColor,
+                                  onTap: () {
+                                    _authController.signInWithGoogle(
+                                        isSignInPage: false, context: context);
+                                  },
+                                ),
+                                SizedBox(
+                                  height: AppSizes.height10 * 2,
+                                ),
+                                CustomButton3(
+                                  text: StringConst.signUpWithFb,
+                                  image: ImageConst.fb,
+                                  color: ColorConst.whiteColor,
+                                  onTap: () {
+                                    _authController.signInWithFacebook(
+                                        isSignInPage: false, context: context);
+                                  },
+                                ),
+                                SizedBox(
+                                  height: AppSizes.height10 * 2,
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    height: AppSizes.height10 * 4.5,
+                                    decoration: BoxDecoration(
+                                      color: ColorConst.whiteColor,
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: ColorConst.greyColor
+                                              .withOpacity(0.5),
+                                          spreadRadius: 1,
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 3),
                                         ),
                                       ],
                                     ),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: AppSizes.height10,
+                                          horizontal: AppSizes.width10 * 2),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Icon(
+                                            Icons.email,
+                                            size: AppSizes.height10 * 2.3,
+                                            color: ColorConst.primaryColor,
+                                          ),
+                                          SizedBox(width: AppSizes.width10),
+                                          Text(
+                                            StringConst.signUpWithEmail,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: ColorConst.blackColor,
+                                              fontSize: AppSizes.height10 * 1.8,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
+                                  onTap: () {
+                                    Get.to(() => SignUpPage());
+                                  },
                                 ),
-                                onTap: () {
-                                  Get.to(() => SignUpPage());
-                                },
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    });
+                        );
+                      });
+                }
               },
             ),
             SizedBox(height: AppSizes.height10 * 2),

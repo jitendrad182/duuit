@@ -3,7 +3,7 @@ import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
 import 'package:duuit/controllers/find_buddies_controller.dart';
 import 'package:duuit/models/add_goal_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddGoalController extends GetxController {
@@ -14,18 +14,19 @@ class AddGoalController extends GetxController {
     successDay: 4,
   ).obs;
 
-  //TODO:
-  doThis(String goalCategoryName) async {
-    final findBuddiesController = Get.put(FindBuddiesController());
-    findBuddiesController.fetchBuddiesGoalInfo(goalCategoryName);
+  late FindBuddiesController _findBuddiesController;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _findBuddiesController = Get.put(FindBuddiesController());
   }
-  //TODO:
 
   String goalCategoryName() {
     return _addGoal.value.goalCategoryName;
   }
 
-  String categoryImageConst() {
+  String goalCategoryImageConst() {
     switch (_addGoal.value.goalCategoryName) {
       case StringConst.reading:
         return ImageConst.readingIcon;
@@ -40,7 +41,7 @@ class AddGoalController extends GetxController {
     }
   }
 
-  Color categoryColorConst() {
+  Color goalCategoryColorConst() {
     switch (_addGoal.value.goalCategoryName) {
       case StringConst.reading:
         return ColorConst.readingColor;
@@ -67,10 +68,17 @@ class AddGoalController extends GetxController {
     return _addGoal.value.successDay;
   }
 
+  doThis(String goalCategoryName) {
+    _findBuddiesController.fetchBuddiesGoalInfo(goalCategoryName);
+  }
+
   void updateGoalCategory(String goalCategoryName) {
     _addGoal.update((val) {
-      val!.goalCategoryName = goalCategoryName;
       doThis(goalCategoryName);
+      val!.goalCategoryName = goalCategoryName;
+      updateGoalDescription('Goal Description.......');
+      updateWeekDuration(1);
+      updateSuccessDay(4);
     });
   }
 

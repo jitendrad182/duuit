@@ -3,7 +3,7 @@ import 'package:duuit/const/firebase_const.dart';
 import 'package:duuit/const/string_const.dart';
 import 'package:duuit/controllers/add_goal_controller.dart';
 import 'package:duuit/controllers/create_profile_controller.dart';
-import 'package:duuit/models/find_goal_model.dart';
+import 'package:duuit/models/find_self_goal_model.dart';
 import 'package:duuit/models/user_profile_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -46,6 +46,7 @@ class DbController2 extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future getMyInfo() async {
+    userProfileModel.removeRange(0, userProfileModel.length);
     try {
       await _firestore
           .collection(FirebaseConst.users)
@@ -89,6 +90,7 @@ class DbController3 extends GetxController {
         FirebaseConst.goalDescription: _addGoalController.goalDescription(),
         FirebaseConst.weekDuration: _addGoalController.weekDuration(),
         FirebaseConst.successDay: _addGoalController.successDay(),
+        FirebaseConst.creationTime: DateTime.now(),
       },
     ).catchError(
       (error) {
@@ -108,10 +110,12 @@ class DbController4 extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future getMyGoalInfo() async {
+    goalModel.removeRange(0, goalModel.length);
     try {
       await _firestore
           .collection(FirebaseConst.goals)
           .where(FirebaseConst.userId, isEqualTo: _auth.currentUser?.uid)
+          .orderBy(FirebaseConst.creationTime)
           .get()
           .then(
         (querySnapshot) {

@@ -1,5 +1,6 @@
 import 'package:duuit/bindings/home_binding.dart';
 import 'package:duuit/const/string_const.dart';
+import 'package:duuit/controllers/add_buddies_controller.dart';
 import 'package:duuit/main.dart';
 import 'package:duuit/services/db_1.dart';
 import 'package:duuit/views/dialogs/dialogs.dart';
@@ -85,7 +86,15 @@ class AuthController extends GetxController {
       if (user != null) {
         await doThis();
         await DbController1().saveUserInfo().then((value) async {
-          await DbController3().saveUserGoalInfo().then((val) async {});
+          await DbController3().saveUserGoalInfo().then((val) async {
+            final DbController2 dbController2 = Get.put(DbController2());
+            final DbController4 dbController4 = Get.put(DbController4());
+            await dbController2.getMyInfo();
+            await dbController4.getMyGoalInfo();
+            Get.offAll(() => HomePage(), binding: HomeBinding());
+            final AddBuddiesController addBuddiesController = Get.find();
+            await addBuddiesController.saveBuddies(dbController4);
+          });
         });
       } else {
         navigatorKey.currentState!.pop();
@@ -181,8 +190,14 @@ class AuthController extends GetxController {
           }
         } else {
           await DbController1().saveUserInfo().then((value) async {
-            await DbController3().saveUserGoalInfo().then((val) {
+            await DbController3().saveUserGoalInfo().then((val) async {
+              final DbController2 dbController2 = Get.put(DbController2());
+              final DbController4 dbController4 = Get.put(DbController4());
+              await dbController2.getMyInfo();
+              await dbController4.getMyGoalInfo();
               Get.offAll(() => HomePage(), binding: HomeBinding());
+              final AddBuddiesController addBuddiesController = Get.find();
+              await addBuddiesController.saveBuddies(dbController4);
             });
           });
         }
@@ -234,8 +249,14 @@ class AuthController extends GetxController {
           }
         } else {
           await DbController1().saveUserInfo().then((value) async {
-            await DbController3().saveUserGoalInfo().then((val) {
-              Get.offAll(() => HomePage(), binding: HomeBinding());
+            await DbController3().saveUserGoalInfo().then((val) async {
+              final DbController2 dbController2 = Get.put(DbController2());
+              final DbController4 dbController4 = Get.put(DbController4());
+              await dbController2.getMyInfo();
+              await dbController4.getMyGoalInfo();
+              Get.offAll(HomePage(), binding: HomeBinding());
+              final AddBuddiesController addBuddiesController = Get.find();
+              await addBuddiesController.saveBuddies(dbController4);
             });
           });
         }

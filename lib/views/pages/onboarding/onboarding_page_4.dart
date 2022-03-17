@@ -46,9 +46,9 @@ class OnboardingPage4 extends StatelessWidget {
               ),
               SizedBox(height: AppSizes.height10 * 1.5),
               CustomCardWidget2(
-                color: _controller.categoryColorConst(),
+                color: _controller.goalCategoryColorConst(),
                 text: _controller.goalCategoryName(),
-                image: _controller.categoryImageConst(),
+                image: _controller.goalCategoryImageConst(),
               ),
               SizedBox(height: AppSizes.height10 * 1.7),
               Form(
