@@ -33,6 +33,7 @@ class OnboardingPage1 extends StatelessWidget {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
                       ImageConst.logo,
@@ -50,6 +51,7 @@ class OnboardingPage1 extends StatelessWidget {
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CustomButton1(
                     text: StringConst.getStarted,

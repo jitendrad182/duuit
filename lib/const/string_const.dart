@@ -78,5 +78,12 @@ class StringConst {
   static const String atLeastAddOneBuddie = 'At least add one Buddie.';
   static const String soTo = 'So, to';
   static const String recap = ' Recap';
+
+  static const String addGoal = 'Add Goal';
+  static const String addBuddies = 'Add Buddies';
+
+  static const String messages = 'Messages';
+  static const String newBuddies = 'New Buddies';
+  static const String conversation = 'Conversation';
 }
 //TODO:

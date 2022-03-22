@@ -1,69 +1,90 @@
 import 'package:duuit/const/image_const.dart';
 import 'package:duuit/controllers/find_buddies_controller.dart';
 import 'package:duuit/models/add_buddies_model.dart';
-import 'package:duuit/services/db_1.dart';
+import 'package:duuit/services/auth.dart';
+import 'package:duuit/services/db/db_5.dart';
 import 'package:get/get.dart';
 
 class AddBuddiesController extends GetxController {
-  final RxList<AddBuddiesModel> addBuddiesModel = <AddBuddiesModel>[].obs;
+  final RxList<AddBuddiesModel> _addBuddiesModel = <AddBuddiesModel>[].obs;
+  final RxList<bool> _expandedVal = <bool>[].obs;
 
-  final RxList<bool> expandedVal = <bool>[].obs;
+  final AuthController _authController = Get.find();
 
-  final FindBuddiesController _findBuddiesController = Get.find();
-
-  addBuddies(int index) async {
-    addBuddiesModel.add(AddBuddiesModel(
+  addBuddies(int index, FindBuddiesController _findBuddiesController) async {
+    _addBuddiesModel.add(AddBuddiesModel(
       goalId: _findBuddiesController.goalId(index),
+      userId: _findBuddiesController.userId(index),
       goalCategoryName: _findBuddiesController.goalCategoryName(index),
       weekDuration: _findBuddiesController.weekDuration(index),
-      avatar: _findBuddiesController.findGoalModel2[index].avatar,
-      userName: _findBuddiesController.findGoalModel2[index].userName,
-      userDescription:
-          _findBuddiesController.findGoalModel2[index].userDescription,
+      avatar: _findBuddiesController.avatar(index),
+      userName: _findBuddiesController.userName(index),
+      userDescription: _findBuddiesController.userDescription(index),
     ));
-    expandedVal.add(false);
+    _expandedVal.add(false);
   }
 
-  saveBuddies(DbController4 dbController4) async {
-    for (int i = 0; i < addBuddiesModel.length; i++) {
-      await DbController5().saveRequestBuddiesInfo(
-          dbController4.goalModel[0].goalId, addBuddiesModel[i].goalId);
-      await DbController5().savePendingRequests(
-          dbController4.goalModel[0].goalId, addBuddiesModel[i].goalId);
+  removeBuddies(int index, FindBuddiesController _findBuddiesController) async {
+    _addBuddiesModel.removeWhere(
+        (element) => element.goalId == _findBuddiesController.goalId(index));
+    _expandedVal.removeRange(0, 1);
+    for (int j = 0; j < _expandedVal.length; j++) {
+      _expandedVal[j] = false;
     }
   }
 
-  removeBuddies(int index) async {
-    addBuddiesModel.removeWhere(
-        (element) => element.goalId == _findBuddiesController.goalId(index));
-    expandedVal.removeRange(0, 1);
+  saveBuddies(String docId) async {
+    for (int i = 0; i < _addBuddiesModel.length; i++) {
+      if (_authController.userId != _addBuddiesModel[i].userId) {
+        await DbController5().saveRequestBuddiesInfo(
+            docId, _addBuddiesModel[i].goalId, _addBuddiesModel[i].userId);
+        await DbController5().savePendingRequests(
+            docId, _addBuddiesModel[i].goalId, _authController.userId);
+        await DbController5().saveSelfBuddiesInfo(
+            _authController.userId, _addBuddiesModel[i].userId);
+        await DbController5().saveBuddiesInfo(
+            _authController.userId, _addBuddiesModel[i].userId);
+      }
+    }
+  }
+
+  length() {
+    return _addBuddiesModel.length;
+  }
+
+  isEmpty() {
+    return _addBuddiesModel.isEmpty;
+  }
+
+  expanded(int index) {
+    return _expandedVal[index];
   }
 
   updateExpandedVal(int index) {
-    if (expandedVal[index]) {
-      expandedVal[index] = false;
+    if (_expandedVal[index]) {
+      _expandedVal[index] = false;
     } else {
-      expandedVal[index] = true;
+      _expandedVal[index] = true;
     }
   }
 
   goalCategoryName(int index) {
-    return addBuddiesModel[index].goalCategoryName;
+    return _addBuddiesModel[index].goalCategoryName;
   }
 
   weekDuration(int index) {
-    return addBuddiesModel[index].weekDuration;
+    return _addBuddiesModel[index].weekDuration;
   }
 
   avatar(int index) {
-    return ImageConst.avatar(addBuddiesModel[index].avatar);
+    return ImageConst.avatarImageConst(_addBuddiesModel[index].avatar);
   }
 
   userName(int index) {
-    return addBuddiesModel[index].userName;
+    return _addBuddiesModel[index].userName;
   }
 
   userDescription(int index) {
-    return addBuddiesModel[index].userDescription;
+    return _addBuddiesModel[index].userDescription;
   }
 }

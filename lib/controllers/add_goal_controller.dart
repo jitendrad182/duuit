@@ -1,59 +1,27 @@
 import 'package:duuit/const/color_const.dart';
 import 'package:duuit/const/image_const.dart';
-import 'package:duuit/const/string_const.dart';
-import 'package:duuit/controllers/find_buddies_controller.dart';
 import 'package:duuit/models/add_goal_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddGoalController extends GetxController {
   final Rx<AddGoalModel> _addGoal = AddGoalModel(
-    goalCategoryName: StringConst.misc,
+    goalCategoryName: 'Misc.',
     goalDescription: 'Goal Description.......',
     weekDuration: 1,
     successDay: 4,
   ).obs;
-
-  late FindBuddiesController _findBuddiesController;
-
-  @override
-  void onInit() {
-    super.onInit();
-    _findBuddiesController = Get.put(FindBuddiesController());
-  }
 
   String goalCategoryName() {
     return _addGoal.value.goalCategoryName;
   }
 
   String goalCategoryImageConst() {
-    switch (_addGoal.value.goalCategoryName) {
-      case StringConst.reading:
-        return ImageConst.readingIcon;
-      case StringConst.meditate:
-        return ImageConst.meditateIcon;
-      case StringConst.workout:
-        return ImageConst.workoutIcon;
-      case StringConst.misc:
-        return ImageConst.miscIcon;
-      default:
-        return ImageConst.miscIcon;
-    }
+    return ImageConst.goalCategoryImageConst(_addGoal.value.goalCategoryName);
   }
 
   Color goalCategoryColorConst() {
-    switch (_addGoal.value.goalCategoryName) {
-      case StringConst.reading:
-        return ColorConst.readingColor;
-      case StringConst.meditate:
-        return ColorConst.meditateColor;
-      case StringConst.workout:
-        return ColorConst.workoutColor;
-      case StringConst.misc:
-        return ColorConst.miscColor;
-      default:
-        return ColorConst.miscColor;
-    }
+    return ColorConst.goalCategoryColorConst(_addGoal.value.goalCategoryName);
   }
 
   String goalDescription() {
@@ -68,13 +36,8 @@ class AddGoalController extends GetxController {
     return _addGoal.value.successDay;
   }
 
-  doThis(String goalCategoryName) {
-    _findBuddiesController.fetchBuddiesGoalInfo(goalCategoryName);
-  }
-
   void updateGoalCategory(String goalCategoryName) {
     _addGoal.update((val) {
-      doThis(goalCategoryName);
       val!.goalCategoryName = goalCategoryName;
       updateGoalDescription('Goal Description.......');
       updateWeekDuration(1);

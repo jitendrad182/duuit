@@ -1,5 +1,6 @@
 class AddBuddiesModel {
   late String goalId;
+  late String userId;
   late String goalCategoryName;
   late int weekDuration;
 
@@ -9,6 +10,7 @@ class AddBuddiesModel {
 
   AddBuddiesModel({
     required this.goalId,
+    required this.userId,
     required this.goalCategoryName,
     required this.weekDuration,
     required this.avatar,

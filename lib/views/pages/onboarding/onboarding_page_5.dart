@@ -11,15 +11,23 @@ import 'package:duuit/views/widgets/custom_titles/custom_title_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-//TODO:
-
 class OnboardingPage5 extends StatelessWidget {
   OnboardingPage5({Key? key}) : super(key: key);
-
   static const id = '/OnboardingPage5';
 
   final FindBuddiesController _findBuddiesController = Get.find();
   final _addBuddiesController = Get.put(AddBuddiesController());
+
+  onTap() {
+    if (_addBuddiesController.isEmpty()) {
+      Get.defaultDialog(
+        title: StringConst.error,
+        middleText: StringConst.atLeastAddOneBuddie,
+      );
+    } else {
+      Get.to(() => OnboardingPage6());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +36,7 @@ class OnboardingPage5 extends StatelessWidget {
       body: SafeArea(
         child: Obx(
           () {
-            return _findBuddiesController.findGoalModel.length < 2
+            return _findBuddiesController.length() < 2
                 ? const Center(child: CircularProgressIndicator())
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,23 +61,24 @@ class OnboardingPage5 extends StatelessWidget {
                         child: ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount:
-                              _findBuddiesController.findGoalModel2.length,
+                          itemCount: _findBuddiesController.length(),
                           itemBuilder: (context, index) {
                             return Column(
                               children: [
                                 Obx(
                                   () {
                                     return _findBuddiesController
-                                            .expandedVal[index]
+                                            .expanded(index)
                                         ? CustomExpansionPanel2(
-                                            controller: _findBuddiesController,
+                                            findBuddiesController:
+                                                _findBuddiesController,
                                             index: index,
                                             addBuddiesController:
                                                 _addBuddiesController,
                                           )
                                         : CustomExpansionPanel1(
-                                            controller: _findBuddiesController,
+                                            findBuddiesController:
+                                                _findBuddiesController,
                                             index: index,
                                             addBuddiesController:
                                                 _addBuddiesController,
@@ -86,15 +95,7 @@ class OnboardingPage5 extends StatelessWidget {
                       Center(
                         child: CustomButton2(
                           text: StringConst.continueButtonString,
-                          onTap: () {
-                            if (_addBuddiesController.addBuddiesModel.isEmpty) {
-                              Get.defaultDialog(
-                                  title: StringConst.error,
-                                  middleText: StringConst.atLeastAddOneBuddie);
-                            } else {
-                              Get.to(() => OnboardingPage6());
-                            }
-                          },
+                          onTap: onTap,
                         ),
                       ),
                       SizedBox(height: AppSizes.height10 * 1.3),
@@ -117,12 +118,12 @@ class OnboardingPage5 extends StatelessWidget {
 class CustomExpansionPanel1 extends StatelessWidget {
   const CustomExpansionPanel1({
     Key? key,
-    required this.controller,
+    required this.findBuddiesController,
     required this.index,
     required this.addBuddiesController,
   }) : super(key: key);
 
-  final FindBuddiesController controller;
+  final FindBuddiesController findBuddiesController;
   final int index;
 
   final AddBuddiesController addBuddiesController;
@@ -151,13 +152,15 @@ class CustomExpansionPanel1 extends StatelessWidget {
               Obx(
                 () {
                   return Checkbox(
-                    value: controller.checkboxVal[index],
+                    value: findBuddiesController.checkbox(index),
                     onChanged: (val) {
-                      controller.updateCheckboxVal(index);
+                      findBuddiesController.updateCheckboxVal(index);
                       if (val == true) {
-                        addBuddiesController.addBuddies(index);
+                        addBuddiesController.addBuddies(
+                            index, findBuddiesController);
                       } else {
-                        addBuddiesController.removeBuddies(index);
+                        addBuddiesController.removeBuddies(
+                            index, findBuddiesController);
                       }
                     },
                   );
@@ -166,7 +169,7 @@ class CustomExpansionPanel1 extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   child: Image.asset(
-                    controller.avatarImageConst(index),
+                    findBuddiesController.avatarImageConst(index),
                     height: AppSizes.height10 * 5.5,
                   ),
                   //TODO:
@@ -188,7 +191,7 @@ class CustomExpansionPanel1 extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                controller.userName(index),
+                                findBuddiesController.userName(index),
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
@@ -205,13 +208,13 @@ class CustomExpansionPanel1 extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                controller.goalCategoryName(index),
+                                findBuddiesController.goalCategoryName(index),
                                 overflow: TextOverflow.ellipsis,
                                 style:
                                     TextStyle(fontSize: AppSizes.width10 * 1.3),
                               ),
                               Text(
-                                'For ${controller.weekDuration(index)} weeks',
+                                'For ${findBuddiesController.weekDuration(index)} weeks',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: AppSizes.width10 * 1.3,
@@ -224,7 +227,7 @@ class CustomExpansionPanel1 extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    controller.updateExpandedVal(index);
+                    findBuddiesController.updateExpandedVal(index);
                   },
                 ),
               ),
@@ -239,12 +242,12 @@ class CustomExpansionPanel1 extends StatelessWidget {
 class CustomExpansionPanel2 extends StatelessWidget {
   const CustomExpansionPanel2({
     Key? key,
-    required this.controller,
+    required this.findBuddiesController,
     required this.index,
     required this.addBuddiesController,
   }) : super(key: key);
 
-  final FindBuddiesController controller;
+  final FindBuddiesController findBuddiesController;
   final int index;
 
   final AddBuddiesController addBuddiesController;
@@ -276,13 +279,15 @@ class CustomExpansionPanel2 extends StatelessWidget {
                   Obx(
                     () {
                       return Checkbox(
-                        value: controller.checkboxVal[index],
+                        value: findBuddiesController.checkbox(index),
                         onChanged: (val) {
-                          controller.updateCheckboxVal(index);
+                          findBuddiesController.updateCheckboxVal(index);
                           if (val == true) {
-                            addBuddiesController.addBuddies(index);
+                            addBuddiesController.addBuddies(
+                                index, findBuddiesController);
                           } else {
-                            addBuddiesController.removeBuddies(index);
+                            addBuddiesController.removeBuddies(
+                                index, findBuddiesController);
                           }
                         },
                       );
@@ -291,7 +296,7 @@ class CustomExpansionPanel2 extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       child: Image.asset(
-                        controller.avatarImageConst(index),
+                        findBuddiesController.avatarImageConst(index),
                         height: AppSizes.height10 * 5.5,
                       ),
                       //TODO:
@@ -314,7 +319,7 @@ class CustomExpansionPanel2 extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    controller.userName(index),
+                                    findBuddiesController.userName(index),
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
@@ -332,13 +337,14 @@ class CustomExpansionPanel2 extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    controller.goalCategoryName(index),
+                                    findBuddiesController
+                                        .goalCategoryName(index),
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         fontSize: AppSizes.width10 * 1.3),
                                   ),
                                   Text(
-                                    'For ${controller.weekDuration(index)} weeks',
+                                    'For ${findBuddiesController.weekDuration(index)} weeks',
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: AppSizes.width10 * 1.3,
@@ -351,7 +357,7 @@ class CustomExpansionPanel2 extends StatelessWidget {
                         ),
                       ),
                       onTap: () {
-                        controller.updateExpandedVal(index);
+                        findBuddiesController.updateExpandedVal(index);
                       },
                     ),
                   ),
@@ -371,7 +377,7 @@ class CustomExpansionPanel2 extends StatelessWidget {
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: AppSizes.width10 * 1.5),
-                child: Text(controller.userDescription(index)),
+                child: Text(findBuddiesController.userDescription(index)),
               ),
             ],
           ),
@@ -380,5 +386,3 @@ class CustomExpansionPanel2 extends StatelessWidget {
     );
   }
 }
-
-//TODO:

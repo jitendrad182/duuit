@@ -1,6 +1,23 @@
+import 'package:duuit/const/string_const.dart';
+
 class ImageConst {
-  static String avatar(int avatarNumber) {
+  static String avatarImageConst(int avatarNumber) {
     return 'assets/avatars/avatar$avatarNumber.png';
+  }
+
+  static String goalCategoryImageConst(String goalCategoryName) {
+    switch (goalCategoryName) {
+      case StringConst.reading:
+        return readingIcon;
+      case StringConst.meditate:
+        return meditateIcon;
+      case StringConst.workout:
+        return workoutIcon;
+      case StringConst.misc:
+        return miscIcon;
+      default:
+        return miscIcon;
+    }
   }
 
   static const String appLogo = 'assets/images/app_logo.png';
@@ -25,4 +42,7 @@ class ImageConst {
 
   static const String google = 'assets/images/google.png';
   static const String fb = 'assets/images/fb.png';
+
+  static const String buddie = 'assets/images/buddie.png';
+  static const String goal = 'assets/images/goal.png';
 }

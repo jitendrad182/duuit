@@ -18,10 +18,10 @@ class ForgotPasswordPage extends StatelessWidget {
   final _key = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
 
-  void onTap() async {
+  void onTap(BuildContext context) async {
     if (_key.currentState!.validate()) {
       FocusManager.instance.primaryFocus!.unfocus();
-      await _controller.forgotPassword(_emailController.text.trim());
+      await _controller.forgotPassword(_emailController.text.trim(), context);
     }
   }
 
@@ -64,7 +64,9 @@ class ForgotPasswordPage extends StatelessWidget {
               SizedBox(height: AppSizes.height10 * 2),
               CustomButton2(
                 text: StringConst.resetPassword,
-                onTap: onTap,
+                onTap: () {
+                  onTap(context);
+                },
               ),
               SizedBox(height: AppSizes.height10 * 2),
             ],

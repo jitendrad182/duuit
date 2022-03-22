@@ -21,4 +21,16 @@ class FirebaseConst {
   static const String requestedBuddies = 'requestedBuddies';
 
   static const String pendingRequests = 'pendingRequests';
+
+  static const String buddies = 'buddies';
+
+  static const String chats = 'chats';
+
+  static const String chatRooms = "chatRooms";
+
+  static const String chat = 'chat';
+
+  static const String message = 'message';
+  static const String messageTs = 'messageTs';
+  static const String messageBy = 'messageBy';
 }

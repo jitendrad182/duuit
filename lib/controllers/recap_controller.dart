@@ -1,13 +1,12 @@
-import 'package:duuit/const/image_const.dart';
 import 'package:duuit/controllers/create_profile_controller.dart';
 import 'package:duuit/services/auth.dart';
-import 'package:duuit/services/db_1.dart';
+import 'package:duuit/services/db/db_2.dart';
 import 'package:get/get.dart';
 
 class RecapController extends GetxController {
   final AuthController _authController = Get.find();
 
-  bool? dbController2IsInitialized;
+  bool? _isProfileController;
 
   late CreateProfileController _createProfileController;
   late DbController2 _dbController2;
@@ -19,35 +18,35 @@ class RecapController extends GetxController {
   }
 
   doThis() {
-    dbController2IsInitialized = _authController.dbController2IsInitialized;
-    if (dbController2IsInitialized == true) {
-      _dbController2 = Get.find();
-    } else {
+    _isProfileController = _authController.createProfileControllerIsInitialized;
+    if (_isProfileController == true) {
       _createProfileController = Get.find();
+    } else {
+      _dbController2 = Get.find();
     }
   }
 
-  avatar() {
-    if (dbController2IsInitialized == true) {
-      return ImageConst.avatar(_dbController2.userProfileModel[0].avatar);
-    } else {
+  avatarImageConst() {
+    if (_isProfileController == true) {
       return _createProfileController.avatarImageConst();
+    } else {
+      return _dbController2.avatarImageConst();
     }
   }
 
   userName() {
-    if (dbController2IsInitialized == true) {
-      return _dbController2.userProfileModel[0].userName;
-    } else {
+    if (_isProfileController == true) {
       return _createProfileController.userName();
+    } else {
+      return _dbController2.userName();
     }
   }
 
   userDescription() {
-    if (dbController2IsInitialized == true) {
-      return _dbController2.userProfileModel[0].userDescription;
-    } else {
+    if (_isProfileController == true) {
       return _createProfileController.userDescription();
+    } else {
+      return _dbController2.userDescription();
     }
   }
 }

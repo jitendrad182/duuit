@@ -40,7 +40,7 @@ class AvatarChoosePage extends StatelessWidget {
                       GestureDetector(
                         child: Center(
                           child: Image.asset(
-                            ImageConst.avatar(index + 1),
+                            ImageConst.avatarImageConst(index + 1),
                             height: AppSizes.height10 * 14,
                           ),
                         ),
@@ -51,7 +51,7 @@ class AvatarChoosePage extends StatelessWidget {
                       GestureDetector(
                         child: Center(
                           child: Image.asset(
-                            ImageConst.avatar(index + 56),
+                            ImageConst.avatarImageConst(index + 56),
                             height: AppSizes.height10 * 14,
                           ),
                         ),

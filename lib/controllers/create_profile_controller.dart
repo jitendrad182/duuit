@@ -23,7 +23,7 @@ class CreateProfileController extends GetxController {
   }
 
   String avatarImageConst() {
-    return ImageConst.avatar(_createProfile.value.avatar);
+    return ImageConst.avatarImageConst(_createProfile.value.avatar);
   }
 
   String userName() {

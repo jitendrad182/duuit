@@ -1,4 +1,3 @@
-import 'package:duuit/bindings/home_binding.dart';
 import 'package:duuit/const/color_const.dart';
 import 'package:duuit/const/string_const.dart';
 import 'package:duuit/services/auth.dart';
@@ -44,9 +43,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: StringConst.appTitle,
       navigatorKey: navigatorKey,
-      initialBinding: HomeBinding(),
-      //TODO:
-      theme: ThemeData.light().copyWith(),
+      theme: ThemeData.light().copyWith(
+        bottomSheetTheme:
+            BottomSheetThemeData(backgroundColor: Colors.black.withOpacity(0)),
+      ),
       home: FutureBuilder(
         future: _authController.currentUser(),
         builder: (context, snapshot) {
@@ -55,8 +55,8 @@ class MyApp extends StatelessWidget {
           } else if (snapshot.hasError) {
             return const ErrorPage();
           } else if (snapshot.hasData) {
-            if (_authController.userInfo! >= 1) {
-              if (_authController.userGoalInfo! >= 1) {
+            if (_authController.userInfo >= 1) {
+              if (_authController.userGoalInfo >= 1) {
                 return HomePage();
               } else {
                 return OnboardingPage3();
@@ -72,18 +72,16 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: OnboardingPage1.id, page: () => const OnboardingPage1()),
         GetPage(name: OnboardingPage2.id, page: () => OnboardingPage2()),
-        GetPage(name: AvatarChoosePage.id, page: () => AvatarChoosePage()),
         GetPage(name: OnboardingPage3.id, page: () => OnboardingPage3()),
         GetPage(name: OnboardingPage4.id, page: () => OnboardingPage4()),
         GetPage(name: OnboardingPage5.id, page: () => OnboardingPage5()),
         GetPage(name: OnboardingPage6.id, page: () => OnboardingPage6()),
-        GetPage(name: SignUpPage.id, page: () => SignUpPage()),
+        GetPage(name: AvatarChoosePage.id, page: () => AvatarChoosePage()),
         GetPage(name: SignInPage.id, page: () => SignInPage()),
         GetPage(name: ForgotPasswordPage.id, page: () => ForgotPasswordPage()),
-        GetPage(
-            name: HomePage.id, page: () => HomePage(), binding: HomeBinding()),
+        GetPage(name: SignUpPage.id, page: () => SignUpPage()),
+        GetPage(name: HomePage.id, page: () => HomePage()),
       ],
-      //TODO:
     );
   }
 }
