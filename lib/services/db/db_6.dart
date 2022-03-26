@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duuit/const/firebase_const.dart';
 import 'package:duuit/services/auth.dart';
+import 'package:duuit/views/dialogs/dialogs.dart';
 import 'package:get/get.dart';
 
 class DbController6 extends GetxController {
@@ -17,6 +18,10 @@ class DbController6 extends GetxController {
       {
         FirebaseConst.userId: userId,
       },
+    ).catchError(
+      (error) {
+        Dialogs.defaultDialog1();
+      },
     );
   }
 
@@ -29,6 +34,10 @@ class DbController6 extends GetxController {
         .set(
       {
         FirebaseConst.userId: _authController.userId,
+      },
+    ).catchError(
+      (error) {
+        Dialogs.defaultDialog1();
       },
     );
   }
@@ -46,6 +55,10 @@ class DbController6 extends GetxController {
         FirebaseConst.messageTs: DateTime.now(),
         FirebaseConst.messageBy: messageBy,
       },
+    ).catchError(
+      (error) {
+        Dialogs.defaultDialog1();
+      },
     );
   }
 
@@ -61,6 +74,10 @@ class DbController6 extends GetxController {
         FirebaseConst.message: message,
         FirebaseConst.messageTs: DateTime.now(),
         FirebaseConst.messageBy: messageBy,
+      },
+    ).catchError(
+      (error) {
+        Dialogs.defaultDialog1();
       },
     );
   }

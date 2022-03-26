@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-//TODO:
 class DbController4 extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -20,7 +19,7 @@ class DbController4 extends GetxController {
       await _firestore
           .collection(FirebaseConst.goals)
           .where(FirebaseConst.userId, isEqualTo: _auth.currentUser?.uid)
-          .orderBy(FirebaseConst.creationTime)
+          .orderBy(FirebaseConst.creationTime, descending: true)
           .get()
           .then(
         (querySnapshot) {
@@ -60,12 +59,14 @@ class DbController4 extends GetxController {
 
   goalCategoryImageConst(int index) {
     return ImageConst.goalCategoryImageConst(
-        _goalModel[index].goalCategoryName);
+      _goalModel[index].goalCategoryName,
+    );
   }
 
   goalCategoryColorConst(int index) {
     return ColorConst.goalCategoryColorConst(
-        _goalModel[index].goalCategoryName);
+      _goalModel[index].goalCategoryName,
+    );
   }
 
   goalDescription(int index) {
@@ -76,9 +77,7 @@ class DbController4 extends GetxController {
     if (_goalModel[index].successDay == 7) {
       return 'Everyday';
     } else {
-      return '${_goalModel[index].successDay} days per week.';
+      return '${_goalModel[index].successDay} days per week';
     }
   }
 }
-
-//TODO:

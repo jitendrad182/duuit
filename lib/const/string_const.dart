@@ -85,5 +85,8 @@ class StringConst {
   static const String messages = 'Messages';
   static const String newBuddies = 'New Buddies';
   static const String conversation = 'Conversation';
+
+  static const String only5BuddiesError =
+      'You can only add maximum 5 Buddies at a time';
 }
 //TODO:

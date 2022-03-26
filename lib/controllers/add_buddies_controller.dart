@@ -1,8 +1,10 @@
 import 'package:duuit/const/image_const.dart';
+import 'package:duuit/const/string_const.dart';
 import 'package:duuit/controllers/find_buddies_controller.dart';
 import 'package:duuit/models/add_buddies_model.dart';
 import 'package:duuit/services/auth.dart';
 import 'package:duuit/services/db/db_5.dart';
+import 'package:duuit/views/dialogs/dialogs.dart';
 import 'package:get/get.dart';
 
 class AddBuddiesController extends GetxController {
@@ -12,16 +14,21 @@ class AddBuddiesController extends GetxController {
   final AuthController _authController = Get.find();
 
   addBuddies(int index, FindBuddiesController _findBuddiesController) async {
-    _addBuddiesModel.add(AddBuddiesModel(
-      goalId: _findBuddiesController.goalId(index),
-      userId: _findBuddiesController.userId(index),
-      goalCategoryName: _findBuddiesController.goalCategoryName(index),
-      weekDuration: _findBuddiesController.weekDuration(index),
-      avatar: _findBuddiesController.avatar(index),
-      userName: _findBuddiesController.userName(index),
-      userDescription: _findBuddiesController.userDescription(index),
-    ));
-    _expandedVal.add(false);
+    if (_addBuddiesModel.length < 5) {
+      _findBuddiesController.updateCheckboxVal(index);
+      _addBuddiesModel.add(AddBuddiesModel(
+        goalId: _findBuddiesController.goalId(index),
+        userId: _findBuddiesController.userId(index),
+        goalCategoryName: _findBuddiesController.goalCategoryName(index),
+        weekDuration: _findBuddiesController.weekDuration(index),
+        avatar: _findBuddiesController.avatar(index),
+        userName: _findBuddiesController.userName(index),
+        userDescription: _findBuddiesController.userDescription(index),
+      ));
+      _expandedVal.add(false);
+    } else {
+      Dialogs.defaultDialog2(StringConst.only5BuddiesError);
+    }
   }
 
   removeBuddies(int index, FindBuddiesController _findBuddiesController) async {
@@ -36,14 +43,10 @@ class AddBuddiesController extends GetxController {
   saveBuddies(String docId) async {
     for (int i = 0; i < _addBuddiesModel.length; i++) {
       if (_authController.userId != _addBuddiesModel[i].userId) {
-        await DbController5().saveRequestBuddiesInfo(
+        await DbController5().saveRequestedBuddiesInfo(
             docId, _addBuddiesModel[i].goalId, _addBuddiesModel[i].userId);
         await DbController5().savePendingRequests(
             docId, _addBuddiesModel[i].goalId, _authController.userId);
-        await DbController5().saveSelfBuddiesInfo(
-            _authController.userId, _addBuddiesModel[i].userId);
-        await DbController5().saveBuddiesInfo(
-            _authController.userId, _addBuddiesModel[i].userId);
       }
     }
   }

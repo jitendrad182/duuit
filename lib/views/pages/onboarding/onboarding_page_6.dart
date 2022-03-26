@@ -20,6 +20,7 @@ import 'package:duuit/views/widgets/custom_titles/custom_title_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+//TODO:
 class OnboardingPage6 extends StatelessWidget {
   OnboardingPage6({Key? key}) : super(key: key);
   static const id = '/OnboardingPage6';
@@ -647,3 +648,4 @@ class CustomExpansionPanel4 extends StatelessWidget {
     );
   }
 }
+//TODO:

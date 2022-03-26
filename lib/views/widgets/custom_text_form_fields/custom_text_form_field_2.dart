@@ -32,6 +32,7 @@ class CustomTextFormField2 extends StatelessWidget {
         textAlign: TextAlign.start,
         controller: controller,
         inputFormatters: inputFormatters,
+        textCapitalization: TextCapitalization.sentences,
         obscureText: obscureText,
         maxLines: maxLines,
         validator: validator,

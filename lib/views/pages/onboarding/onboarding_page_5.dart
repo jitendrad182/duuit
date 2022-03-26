@@ -11,6 +11,7 @@ import 'package:duuit/views/widgets/custom_titles/custom_title_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+//TODO:
 class OnboardingPage5 extends StatelessWidget {
   OnboardingPage5({Key? key}) : super(key: key);
   static const id = '/OnboardingPage5';
@@ -154,7 +155,6 @@ class CustomExpansionPanel1 extends StatelessWidget {
                   return Checkbox(
                     value: findBuddiesController.checkbox(index),
                     onChanged: (val) {
-                      findBuddiesController.updateCheckboxVal(index);
                       if (val == true) {
                         addBuddiesController.addBuddies(
                             index, findBuddiesController);
@@ -281,7 +281,6 @@ class CustomExpansionPanel2 extends StatelessWidget {
                       return Checkbox(
                         value: findBuddiesController.checkbox(index),
                         onChanged: (val) {
-                          findBuddiesController.updateCheckboxVal(index);
                           if (val == true) {
                             addBuddiesController.addBuddies(
                                 index, findBuddiesController);
@@ -386,3 +385,4 @@ class CustomExpansionPanel2 extends StatelessWidget {
     );
   }
 }
+//TODO:

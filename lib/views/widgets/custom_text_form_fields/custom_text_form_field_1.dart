@@ -29,6 +29,7 @@ class CustomTextFormField1 extends StatelessWidget {
         keyboardType: keyboardType,
         controller: controller,
         inputFormatters: inputFormatters,
+        textCapitalization: TextCapitalization.sentences,
         maxLines: maxLines,
         validator: validator,
         obscureText: obscureText,

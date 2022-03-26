@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duuit/const/firebase_const.dart';
-import 'package:duuit/const/string_const.dart';
 import 'package:duuit/controllers/create_profile_controller.dart';
+import 'package:duuit/views/dialogs/dialogs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
@@ -26,10 +26,7 @@ class DbController1 extends GetxController {
       },
     ).catchError(
       (error) {
-        Get.defaultDialog(
-          title: StringConst.error,
-          middleText: StringConst.anUnexpectedError,
-        );
+        Dialogs.defaultDialog1();
       },
     );
   }

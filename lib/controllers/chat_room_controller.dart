@@ -6,6 +6,7 @@ import 'package:duuit/services/auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
+//TODO:
 class ChatRoomPageController1 extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final AuthController _authController = Get.find();
@@ -217,3 +218,4 @@ class ChatPageController extends GetxController {
     return _userProfileModel[0].userDescription;
   }
 }
+//TODO:

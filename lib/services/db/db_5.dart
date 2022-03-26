@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duuit/const/firebase_const.dart';
-import 'package:duuit/const/string_const.dart';
+import 'package:duuit/views/dialogs/dialogs.dart';
 import 'package:get/get.dart';
 
 class DbController5 extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  saveRequestBuddiesInfo(
+  saveRequestedBuddiesInfo(
       String? selfGoalId, String? goalId, String? userId) async {
     return _firestore
         .collection(FirebaseConst.goals)
@@ -20,10 +20,7 @@ class DbController5 extends GetxController {
       },
     ).catchError(
       (error) {
-        Get.defaultDialog(
-          title: StringConst.error,
-          middleText: StringConst.anUnexpectedError,
-        );
+        Dialogs.defaultDialog1();
       },
     );
   }
@@ -42,10 +39,7 @@ class DbController5 extends GetxController {
       },
     ).catchError(
       (error) {
-        Get.defaultDialog(
-          title: StringConst.error,
-          middleText: StringConst.anUnexpectedError,
-        );
+        Dialogs.defaultDialog1();
       },
     );
   }
@@ -62,10 +56,7 @@ class DbController5 extends GetxController {
       },
     ).catchError(
       (error) {
-        Get.defaultDialog(
-          title: StringConst.error,
-          middleText: StringConst.anUnexpectedError,
-        );
+        Dialogs.defaultDialog1();
       },
     );
   }
@@ -77,15 +68,44 @@ class DbController5 extends GetxController {
         .collection(FirebaseConst.buddies)
         .doc(selfUserId)
         .set(
-      {
-        FirebaseConst.userId: selfUserId,
-      },
-    ).catchError(
-      (error) {
-        Get.defaultDialog(
-          title: StringConst.error,
-          middleText: StringConst.anUnexpectedError,
+          {
+            FirebaseConst.userId: selfUserId,
+          },
+        )
+        .then(
+          (value) {},
+        )
+        .catchError(
+          (error) {
+            Dialogs.defaultDialog1();
+          },
         );
+  }
+
+  deleteRequestedBuddiesInfo(String? selfGoalId, String? goalId) async {
+    return _firestore
+        .collection(FirebaseConst.goals)
+        .doc(goalId)
+        .collection(FirebaseConst.requestedBuddies)
+        .doc(selfGoalId)
+        .delete()
+        .catchError(
+      (error) {
+        Dialogs.defaultDialog1();
+      },
+    );
+  }
+
+  deletePendingRequests(String? selfGoalId, String? goalId) async {
+    return _firestore
+        .collection(FirebaseConst.goals)
+        .doc(selfGoalId)
+        .collection(FirebaseConst.pendingRequests)
+        .doc(goalId)
+        .delete()
+        .catchError(
+      (error) {
+        Dialogs.defaultDialog1();
       },
     );
   }
