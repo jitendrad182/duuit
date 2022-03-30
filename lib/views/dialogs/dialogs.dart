@@ -15,17 +15,19 @@ class Dialogs {
     );
   }
 
-  static defaultDialog1() {
-    return Get.defaultDialog(
-      title: StringConst.error,
-      middleText: StringConst.anUnexpectedError,
-    );
-  }
-
-  static defaultDialog2(String errorMessage) {
+  //TODO:
+  static defaultErrorDialog1(String errorMessage) {
     return Get.defaultDialog(
       title: StringConst.error,
       middleText: errorMessage,
     );
   }
+
+  static defaultDialog1(String title, String middleText) {
+    return Get.defaultDialog(
+      title: title,
+      middleText: middleText,
+    );
+  }
+  //TODO:
 }

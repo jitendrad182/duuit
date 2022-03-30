@@ -1,18 +1,12 @@
 import 'package:duuit/const/color_const.dart';
-import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
-import 'package:duuit/controllers/chat_room_controller.dart';
-import 'package:duuit/controllers/find_buddies_controller.dart';
 import 'package:duuit/services/db/db_2.dart';
 import 'package:duuit/services/db/db_4.dart';
 import 'package:duuit/utils/app_sizes.dart';
-import 'package:duuit/views/widgets/custom_app_bars/custom_app_bar_1.dart';
 import 'package:duuit/views/widgets/custom_app_bars/custom_app_bar_2.dart';
 import 'package:duuit/views/widgets/custom_app_bars/custom_app_bar_3.dart';
 import 'package:duuit/views/widgets/custom_app_bars/custom_bottom_app_bar_1.dart';
 import 'package:duuit/views/widgets/custom_buttons/custom_floating_action_button_1.dart';
-import 'package:duuit/views/widgets/custom_choose_widgets/custom_choose_widget_1.dart';
-import 'package:duuit/views/widgets/custom_titles/custom_title_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,12 +14,8 @@ import 'package:get/get.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
-  static const id = '/HomePage';
   final DbController2 _dbController2 = Get.find();
   final DbController4 _dbController4 = Get.find();
-
-  final _controller1 = Get.put(ChatRoomPageController1());
-  final _controller2 = Get.put(ChatRoomPageController2());
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +133,8 @@ class HomePage extends StatelessWidget {
                                                         .nunitoSansFont),
                                               ),
                                               Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     _dbController4
@@ -216,212 +208,12 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class AddBuddiesPage1 extends StatelessWidget {
-  AddBuddiesPage1({Key? key}) : super(key: key);
-  static const id = '/OnboardingPage3';
-
-  final DbController4 _dbController4 = Get.find();
-  final _findBuddiesController = Get.put(FindBuddiesController());
-
-  void onTap(String string) {
-    _findBuddiesController.fetchBuddiesGoalInfo(string);
-    Get.to(() => AddBuddiesPage2());
-  }
-
-  int itemCount() {
-    double item = _dbController4.length() / 2;
-    return item.toInt();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    AppSizes.mediaQueryHeightWidth();
-    return Scaffold(
-      appBar: appBar2,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              SizedBox(height: AppSizes.height10 * 1.5),
-              Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: AppSizes.height10 * 2.5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: ColorConst.primaryColor,
-                        size: AppSizes.height10 * 3.8,
-                      ),
-                      onTap: () {
-                        Get.back();
-                      },
-                    ),
-                    Flexible(
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Discover Buddies',
-                              style: TextStyle(
-                                fontSize: AppSizes.height10 * 3,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: StringConst.nunitoSansFont,
-                                color: ColorConst.blackColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: AppSizes.height10 * 3),
-              Expanded(
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: itemCount(),
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        SizedBox(height: AppSizes.height10 * 1.5),
-                      ],
-                    );
-                  },
-                ),
-              ),
-              CustomChooseWidget1(
-                image1: ImageConst.reading,
-                image2: ImageConst.meditate,
-                onTap1: () {
-                  onTap(StringConst.reading);
-                },
-                onTap2: () {
-                  onTap(StringConst.meditate);
-                },
-              ),
-              SizedBox(height: AppSizes.height10 * 3),
-              Center(
-                child: Image.asset(ImageConst.g2, width: AppSizes.width10 * 5),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AddBuddiesPage2 extends StatelessWidget {
-  AddBuddiesPage2({Key? key}) : super(key: key);
-  static const id = '/OnboardingPage3';
-
-  final _findBuddiesController = Get.put(FindBuddiesController());
-
-  void onTap(String string) {
-    _findBuddiesController.fetchBuddiesGoalInfo(string);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    AppSizes.mediaQueryHeightWidth();
-    return Scaffold(
-      appBar: appBar2,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              SizedBox(height: AppSizes.height10 * 1.5),
-              const CustomTitle2(
-                text: StringConst.whatBringsYouTo,
-                coloredText: StringConst.appTitle,
-              ),
-              SizedBox(height: AppSizes.height10 * 3),
-              CustomChooseWidget1(
-                image1: ImageConst.reading,
-                image2: ImageConst.meditate,
-                onTap1: () {
-                  onTap(StringConst.reading);
-                },
-                onTap2: () {
-                  onTap(StringConst.meditate);
-                },
-              ),
-              CustomChooseWidget1(
-                image1: ImageConst.workout,
-                image2: ImageConst.misc,
-                onTap1: () {
-                  onTap(StringConst.workout);
-                },
-                onTap2: () {
-                  onTap(StringConst.misc);
-                },
-              ),
-              SizedBox(height: AppSizes.height10 * 3),
-              Center(
-                child: Image.asset(ImageConst.g2, width: AppSizes.width10 * 5),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class NotificationPage1 extends StatelessWidget {
   NotificationPage1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold();
-  }
-}
-
-class ProfilePage1 extends StatelessWidget {
-  ProfilePage1({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold();
-  }
-}
-
-class WaitingPage extends StatelessWidget {
-  const WaitingPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    AppSizes.mediaQueryHeightWidth();
-    return Scaffold(
-      backgroundColor: ColorConst.primaryColor,
-      appBar: appBar1,
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              ImageConst.logo,
-              height: AppSizes.height10 * 10,
-            ),
-            SizedBox(height: AppSizes.height10 * 2),
-            Image.asset(
-              ImageConst.duuit,
-              height: AppSizes.height10 * 3.3,
-            ),
-            SizedBox(height: AppSizes.height10 * 4),
-            const Center(child: CircularProgressIndicator())
-          ],
-        ),
-      ),
-    );
   }
 }
 

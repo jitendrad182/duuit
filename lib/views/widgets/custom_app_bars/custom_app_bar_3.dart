@@ -4,6 +4,7 @@ import 'package:duuit/const/string_const.dart';
 import 'package:duuit/services/auth.dart';
 import 'package:duuit/utils/app_sizes.dart';
 import 'package:duuit/views/pages/home/home.dart';
+import 'package:duuit/views/pages/home/profile_page1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';

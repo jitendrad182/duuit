@@ -2,16 +2,10 @@ import 'package:duuit/const/color_const.dart';
 import 'package:duuit/const/string_const.dart';
 import 'package:duuit/services/auth.dart';
 import 'package:duuit/views/pages/home/home.dart';
-import 'package:duuit/views/pages/onboarding/avatar_choose_page.dart';
-import 'package:duuit/views/pages/onboarding/forgot_password_page.dart';
 import 'package:duuit/views/pages/onboarding/onboarding_page_1.dart';
 import 'package:duuit/views/pages/onboarding/onboarding_page_2.dart';
 import 'package:duuit/views/pages/onboarding/onboarding_page_3.dart';
-import 'package:duuit/views/pages/onboarding/onboarding_page_4.dart';
-import 'package:duuit/views/pages/onboarding/onboarding_page_5.dart';
-import 'package:duuit/views/pages/onboarding/onboarding_page_6.dart';
-import 'package:duuit/views/pages/onboarding/sign_in_page.dart';
-import 'package:duuit/views/pages/onboarding/sign_up_page.dart';
+import 'package:duuit/views/pages/waiting_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -69,19 +63,6 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
-      getPages: [
-        GetPage(name: OnboardingPage1.id, page: () => const OnboardingPage1()),
-        GetPage(name: OnboardingPage2.id, page: () => OnboardingPage2()),
-        GetPage(name: OnboardingPage3.id, page: () => OnboardingPage3()),
-        GetPage(name: OnboardingPage4.id, page: () => OnboardingPage4()),
-        GetPage(name: OnboardingPage5.id, page: () => OnboardingPage5()),
-        GetPage(name: OnboardingPage6.id, page: () => OnboardingPage6()),
-        GetPage(name: AvatarChoosePage.id, page: () => AvatarChoosePage()),
-        GetPage(name: SignInPage.id, page: () => SignInPage()),
-        GetPage(name: ForgotPasswordPage.id, page: () => ForgotPasswordPage()),
-        GetPage(name: SignUpPage.id, page: () => SignUpPage()),
-        GetPage(name: HomePage.id, page: () => HomePage()),
-      ],
     );
   }
 }

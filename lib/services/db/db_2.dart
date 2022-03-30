@@ -35,7 +35,7 @@ class DbController2 extends GetxController {
       });
     } catch (e) {
       if (kDebugMode) {
-        print('Error == $e');
+        print('DbController2 getMyInfo Error == $e');
       }
     }
   }

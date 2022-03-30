@@ -58,6 +58,31 @@ class FindBuddiesController extends GetxController {
     }
   }
 
+  //TODO:
+  fetchBuddiesGoalInfo2() async {
+    _findGoalModel.removeRange(0, _findGoalModel.length);
+    _findGoalModel2.removeRange(0, _findGoalModel2.length);
+    _expandedVal.removeRange(0, _expandedVal.length);
+    _checkboxVal.removeRange(0, _checkboxVal.length);
+    await _firestore
+        .collection(FirebaseConst.goals)
+        .where(FirebaseConst.userId, isNotEqualTo: _authController.userId)
+        .get()
+        .then(
+      (querySnapshot) async {
+        for (var element in querySnapshot.docs) {
+          _findGoalModel.add(FindGoalModel1(
+            goalId: element.id,
+            goalCategoryName: element[FirebaseConst.goalCategoryName],
+            weekDuration: element[FirebaseConst.weekDuration],
+          ));
+          await fetchBuddiesUserInfo(await element[FirebaseConst.userId]);
+        }
+      },
+    );
+  }
+  //TODO:
+
   fetchBuddiesUserInfo(String userId) async {
     await _firestore
         .collection(FirebaseConst.users)

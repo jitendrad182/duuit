@@ -1,7 +1,6 @@
 import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
 import 'package:duuit/controllers/add_goal_controller.dart';
-import 'package:duuit/controllers/find_buddies_controller.dart';
 import 'package:duuit/utils/app_sizes.dart';
 import 'package:duuit/views/pages/onboarding/onboarding_page_4.dart';
 import 'package:duuit/views/widgets/custom_app_bars/custom_app_bar_2.dart';
@@ -12,13 +11,10 @@ import 'package:get/get.dart';
 
 class OnboardingPage3 extends StatelessWidget {
   OnboardingPage3({Key? key}) : super(key: key);
-  static const id = '/OnboardingPage3';
 
   final _addGoalController = Get.put(AddGoalController());
-  final _findBuddiesController = Get.put(FindBuddiesController());
 
   void onTap(String string) {
-    _findBuddiesController.fetchBuddiesGoalInfo(string);
     _addGoalController.updateGoalCategory(string);
     Get.to(() => OnboardingPage4());
   }

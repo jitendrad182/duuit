@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 
 class AvatarChoosePage extends StatelessWidget {
   AvatarChoosePage({Key? key}) : super(key: key);
-  static const id = '/AvatarChoosePage';
 
   final CreateProfileController _controller = Get.find();
 

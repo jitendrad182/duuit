@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 
 class OnboardingPage1 extends StatelessWidget {
   const OnboardingPage1({Key? key}) : super(key: key);
-  static const id = '/';
 
   @override
   Widget build(BuildContext context) {

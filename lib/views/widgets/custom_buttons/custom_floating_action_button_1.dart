@@ -1,7 +1,7 @@
 import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
 import 'package:duuit/utils/app_sizes.dart';
-import 'package:duuit/views/pages/home/home.dart';
+import 'package:duuit/views/pages/home/discover_buddies_page_1.dart';
 import 'package:duuit/views/pages/onboarding/onboarding_page_3.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,7 +52,7 @@ class CustomFloatingActionButton1 extends StatelessWidget {
                         ],
                       ),
                       onTap: () {
-                        Get.to(() => AddBuddiesPage1());
+                        Get.to(() => DiscoverBuddiesPage1());
                       },
                     ),
                   ],

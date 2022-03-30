@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   ForgotPasswordPage({Key? key}) : super(key: key);
-  static const id = '/ForgotPasswordPage';
 
   final AuthController _controller = Get.find();
 

@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({Key? key}) : super(key: key);
-  static const id = '/SignUpPage';
 
   final AuthController _controller = Get.find();
   final _key = GlobalKey<FormState>();
@@ -23,9 +22,9 @@ class SignUpPage extends StatelessWidget {
     if (_key.currentState!.validate()) {
       FocusManager.instance.primaryFocus!.unfocus();
       _controller.createUser(
-        email: _emailController.text.trim(),
-        password: _passController.text.trim(),
-        context: context,
+        _emailController.text.trim(),
+        _passController.text.trim(),
+        context,
       );
     }
   }

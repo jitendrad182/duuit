@@ -36,7 +36,7 @@ class DbController4 extends GetxController {
       );
     } catch (e) {
       if (kDebugMode) {
-        print('Error == $e');
+        print('DbController4 getMyGoalInfo Error == $e');
       }
     }
   }

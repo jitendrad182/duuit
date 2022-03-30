@@ -16,7 +16,6 @@ import 'package:get/get.dart';
 
 class OnboardingPage2 extends StatelessWidget {
   OnboardingPage2({Key? key}) : super(key: key);
-  static const id = '/OnboardingPage2';
 
   final CreateProfileController _controller =
       Get.put(CreateProfileController());

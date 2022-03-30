@@ -27,11 +27,12 @@ class AddBuddiesController extends GetxController {
       ));
       _expandedVal.add(false);
     } else {
-      Dialogs.defaultDialog2(StringConst.only5BuddiesError);
+      Dialogs.defaultErrorDialog1(StringConst.only5BuddiesError);
     }
   }
 
   removeBuddies(int index, FindBuddiesController _findBuddiesController) async {
+    _findBuddiesController.updateCheckboxVal(index);
     _addBuddiesModel.removeWhere(
         (element) => element.goalId == _findBuddiesController.goalId(index));
     _expandedVal.removeRange(0, 1);

@@ -27,7 +27,7 @@ class CustomBottomAppBar1 extends StatelessWidget {
               ),
               onPressed: () {
                 if (Get.currentRoute != '/' &&
-                    Get.currentRoute != HomePage.id) {
+                    Get.currentRoute != "/HomePage") {
                   Get.offAll(() => HomePage());
                 }
               },

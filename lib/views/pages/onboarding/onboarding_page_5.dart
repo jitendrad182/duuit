@@ -14,7 +14,6 @@ import 'package:get/get.dart';
 //TODO:
 class OnboardingPage5 extends StatelessWidget {
   OnboardingPage5({Key? key}) : super(key: key);
-  static const id = '/OnboardingPage5';
 
   final FindBuddiesController _findBuddiesController = Get.find();
   final _addBuddiesController = Get.put(AddBuddiesController());
@@ -37,7 +36,7 @@ class OnboardingPage5 extends StatelessWidget {
       body: SafeArea(
         child: Obx(
           () {
-            return _findBuddiesController.length() < 2
+            return _findBuddiesController.length() < 1
                 ? const Center(child: CircularProgressIndicator())
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

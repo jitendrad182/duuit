@@ -23,7 +23,6 @@ import 'package:get/get.dart';
 //TODO:
 class OnboardingPage6 extends StatelessWidget {
   OnboardingPage6({Key? key}) : super(key: key);
-  static const id = '/OnboardingPage6';
 
   final AuthController _authController = Get.find();
   final AddBuddiesController _addBuddiesController = Get.find();
@@ -327,8 +326,7 @@ class OnboardingPage6 extends StatelessWidget {
                                     color: ColorConst.whiteColor,
                                     onTap: () {
                                       _authController.signInWithGoogle(
-                                          isSignInPage: false,
-                                          context: context);
+                                          false, context);
                                     },
                                   ),
                                   SizedBox(
@@ -340,8 +338,7 @@ class OnboardingPage6 extends StatelessWidget {
                                     color: ColorConst.whiteColor,
                                     onTap: () {
                                       _authController.signInWithFacebook(
-                                          isSignInPage: false,
-                                          context: context);
+                                          false, context);
                                     },
                                   ),
                                   SizedBox(

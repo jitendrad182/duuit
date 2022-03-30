@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:duuit/const/firebase_const.dart';
 import 'package:duuit/controllers/add_goal_controller.dart';
-import 'package:duuit/views/dialogs/dialogs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class DbController3 extends GetxController {
@@ -14,24 +14,21 @@ class DbController3 extends GetxController {
 
   saveUserGoalInfo() async {
     User? user = _auth.currentUser;
-    return _firestore
-        .collection(FirebaseConst.goals)
-        .add(
-          {
-            FirebaseConst.userId: user!.uid,
-            FirebaseConst.goalCategoryName:
-                _addGoalController.goalCategoryName(),
-            FirebaseConst.goalDescription: _addGoalController.goalDescription(),
-            FirebaseConst.weekDuration: _addGoalController.weekDuration(),
-            FirebaseConst.successDay: _addGoalController.successDay(),
-            FirebaseConst.creationTime: DateTime.now(),
-          },
-        )
-        .then((value) => docId = value.id)
-        .catchError(
-          (error) {
-            Dialogs.defaultDialog1();
-          },
-        );
+    try {
+      return _firestore.collection(FirebaseConst.goals).add(
+        {
+          FirebaseConst.userId: user!.uid,
+          FirebaseConst.goalCategoryName: _addGoalController.goalCategoryName(),
+          FirebaseConst.goalDescription: _addGoalController.goalDescription(),
+          FirebaseConst.weekDuration: _addGoalController.weekDuration(),
+          FirebaseConst.successDay: _addGoalController.successDay(),
+          FirebaseConst.creationTime: DateTime.now(),
+        },
+      ).then((value) => docId = value.id);
+    } catch (e) {
+      if (kDebugMode) {
+        print('DbController3 saveUserGoalInfo Error == $e');
+      }
+    }
   }
 }

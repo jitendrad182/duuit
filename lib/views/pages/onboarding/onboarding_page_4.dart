@@ -2,6 +2,7 @@ import 'package:duuit/const/color_const.dart';
 import 'package:duuit/const/image_const.dart';
 import 'package:duuit/const/string_const.dart';
 import 'package:duuit/controllers/add_goal_controller.dart';
+import 'package:duuit/controllers/find_buddies_controller.dart';
 import 'package:duuit/utils/app_sizes.dart';
 import 'package:duuit/utils/no_leading_space_formatter.dart';
 import 'package:duuit/views/pages/onboarding/onboarding_page_5.dart';
@@ -15,16 +16,18 @@ import 'package:get/get.dart';
 
 class OnboardingPage4 extends StatelessWidget {
   OnboardingPage4({Key? key}) : super(key: key);
-  static const id = '/OnboardingPage4';
 
   final AddGoalController _controller = Get.find();
+  final _findBuddiesController = Get.put(FindBuddiesController());
 
   final _key = GlobalKey<FormState>();
   final TextEditingController _textEditingController = TextEditingController();
 
-  void onTap() {
+  void onTap(BuildContext context) async {
     if (_key.currentState!.validate()) {
       FocusManager.instance.primaryFocus!.unfocus();
+      _findBuddiesController
+          .fetchBuddiesGoalInfo(_controller.goalCategoryName());
       _controller.updateGoalDescription(_textEditingController.text.trim());
       Get.to(() => OnboardingPage5());
     }
@@ -177,7 +180,9 @@ class OnboardingPage4 extends StatelessWidget {
               SizedBox(height: AppSizes.height10 * 5),
               CustomButton2(
                 text: StringConst.continueButtonString,
-                onTap: onTap,
+                onTap: () {
+                  onTap(context);
+                },
               ),
               SizedBox(height: AppSizes.height10 * 3),
               Center(

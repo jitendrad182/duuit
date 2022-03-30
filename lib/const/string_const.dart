@@ -64,11 +64,15 @@ class StringConst {
   static const String enterYourPassword = 'Enter your Password';
   static const String reEnterYourPassword = 'Repeat your password';
 
-  static const String finishSignup = 'Finish Signup';
+  static const String finishSignup = 'Finish signup';
   static const String emailSignup = ' Email Signup';
 
   static const String somethingWentWrong = 'Something went wrong!';
   static const String findBuddiesToDoTask = 'Find buddies to do task with.';
+  static const String findBuddiesPursuing =
+      'Find buddies pursuing other goals.';
+  static const String findBuddiesForCurrentGoals =
+      'Find buddies for your current goals.';
 
   static const String anUnexpectedError =
       'An unexpected error has occurred.  Please try logging in again.';
@@ -88,5 +92,7 @@ class StringConst {
 
   static const String only5BuddiesError =
       'You can only add maximum 5 Buddies at a time';
+
+  static const String discoverBuddies = ' Discover Buddies';
 }
 //TODO:

@@ -15,7 +15,6 @@ import 'package:get/get.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({Key? key}) : super(key: key);
-  static const id = '/SignInPage';
 
   final _key = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
@@ -27,21 +26,21 @@ class SignInPage extends StatelessWidget {
     if (_key.currentState!.validate()) {
       FocusManager.instance.primaryFocus!.unfocus();
       await _controller.signInWithEmail(
-        email: _emailController.text.trim(),
-        password: _passController.text.trim(),
-        context: context,
+        _emailController.text.trim(),
+        _passController.text.trim(),
+        context,
       );
     }
   }
 
   void signInWithFacebook(BuildContext context) async {
     FocusManager.instance.primaryFocus!.unfocus();
-    await _controller.signInWithFacebook(isSignInPage: true, context: context);
+    await _controller.signInWithFacebook(true, context);
   }
 
   void signInWithGoogle(BuildContext context) async {
     FocusManager.instance.primaryFocus!.unfocus();
-    await _controller.signInWithGoogle(isSignInPage: true, context: context);
+    await _controller.signInWithGoogle(true, context);
   }
 
   void onTap() {
